@@ -1,8 +1,10 @@
 package Server;
 
 import java.io.*;
+import java.net.Socket;
 
 import javax.net.ssl.*;
+import javax.security.cert.X509Certificate;
 
 import java.security.KeyStore;
 
@@ -12,7 +14,7 @@ public class Server {
 		int port = 60212;
 		String path = "";
 		
-		SSLSocketFactory factory = null;
+		SSLServerSocketFactory factory = null;
 		
 		try {
             SSLContext ctx;
@@ -28,46 +30,22 @@ public class Server {
 
             kmf.init(ks, passphrase);
             ctx.init(kmf.getKeyManagers(), null, null);
-
-            factory = ctx.getSocketFactory();
+            factory = ctx.getServerSocketFactory();
         } catch (Exception e) {
             throw new IOException(e.getMessage());
         }
+		
+		SSLServerSocket s = (SSLServerSocket)factory.createServerSocket(8888);
         
-		SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
-
-		socket.startHandshake();
-		socket.setNeedClientAuth(true);
-		
-		PrintWriter out = new PrintWriter(
-                new BufferedWriter(
-                new OutputStreamWriter(
-                socket.getOutputStream())));
-		
-		out.println("GET " + path + " HTTP/1.0");
-		out.println();
-		out.flush();
-		
-		/*
-         * Make sure there were no surprises
-         */
-        if (out.checkError())
-            System.out.println(
-                "SSLSocketClient: java.io.PrintWriter error");
-
-        /* read response */
-        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(
-                                socket.getInputStream()));
-
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null)
-            System.out.println(inputLine);
-
-        in.close();
-        out.close();
-        socket.close();
-		
+		while(true){
+			SSLSocket socket = (SSLSocket)s.accept();
+			socket.setNeedClientAuth(true);
+			SSLSession session = socket.getSession();
+			X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
+			String userName = cert.getSubjectDN().getName();
+			System.out.println(userName);
+			
+			socket.close();
+		}
 	}
 }
