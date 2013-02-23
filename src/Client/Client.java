@@ -9,10 +9,10 @@ import java.security.KeyStore;
 public class Client {
 	public static void main(String[] args) throws IOException{
 		String host = "localhost";
-		int port = 60212;
+		int port = 1337;
 		String path = "";
 		
-		System.setProperty("javax.net.ssl.trustStore", "hca_trusted.jks");
+		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 		System.setProperty("javax.net.ssl.trustStorePassword", "qweqwe");
 		
 		SSLSocketFactory factory = null;
@@ -38,7 +38,7 @@ public class Client {
         }
         
 		SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
-		//socket.setNeedClientAuth(true);
+		socket.setNeedClientAuth(true);
 		
 		printSocketInfo(socket);
 

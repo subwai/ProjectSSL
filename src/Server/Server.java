@@ -13,11 +13,16 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
+
 public class Server {
-	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException, KeyManagementException{
-		int port = 60212;
+	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException, KeyManagementException, InvalidNameException{
+		int port = 1337;
+		//"https://ytoucksandsoffiestakedst:Fl8YfMjOi44jQbhpUkNDbkoh@baversjo.cloudant.com/medical
 		
-		System.setProperty("javax.net.ssl.trustStore", "hca_trusted.jks");
+		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 		System.setProperty("javax.net.ssl.trustStorePassword", "qweqwe");
 		
 		SSLServerSocketFactory factory = null;
@@ -47,9 +52,17 @@ public class Server {
 			printSocketInfo(socket);
 			SSLSession session = socket.getSession();
 			X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
-			String userName = cert.getSubjectDN().getName();
-			System.out.println(userName);
-			
+			//extract CN from DN
+			LdapName ldapDN = new LdapName(cert.getSubjectDN().getName());
+			String userName = "";
+			for(Rdn rdn: ldapDN.getRdns()) {
+				if(rdn.getType().trim().toUpperCase().equals("CN")){
+					userName = rdn.getValue().toString().trim().toLowerCase();
+				}
+			}
+			if(userName.length() > 0){//autheniticated. now authorize request.
+				System.out.println("user " + userName + " authenticated");
+			}
 			socket.close();
 		}
 	}
