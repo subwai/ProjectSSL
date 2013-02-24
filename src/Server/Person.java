@@ -1,6 +1,6 @@
 package Server;
 
-public class Person {
+public class Person{
 	protected String name;
 	
 	public Person(String name){
@@ -10,5 +10,4 @@ public class Person {
 	public String getName(){
 		return name;
 	}
-
 }

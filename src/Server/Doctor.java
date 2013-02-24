@@ -9,7 +9,7 @@ public class Doctor extends Person {
 		this.division = division;
 	}
 
-	public Access access(Division div, String name){
+	public Access access(String name, Division div){
 		if(this.name.equals(name)){
 			return Access.READWRITE;
 		}else if (div == division){
