@@ -13,8 +13,10 @@ public class Record {
 		this.doctor = doctor;
 		this.nurse = nurse;
 		this.division = division;
-		
 	}
-	
+
+	public String getData(){
+		return data;
+	}
 
 }

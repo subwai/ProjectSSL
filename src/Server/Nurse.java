@@ -1,9 +1,11 @@
 package Server;
 
-public class Nurse {
+public class Nurse extends Person {
+	private Division division;
 	
-	public Nurse(){
-		
+	public Nurse(String name, Division division){
+		super(name);
+		this.division = division;
 	}
 
 }
