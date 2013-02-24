@@ -4,7 +4,7 @@ public class Doctor extends Person {
 	private Division division;
 	
 	
-	public Doctor(String name){
+	public Doctor(String name, Division division){
 		super(name);
 		this.division = division;
 	}

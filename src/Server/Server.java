@@ -22,6 +22,24 @@ public class Server {
 		int port = 1337;
 		//"https://ytoucksandsoffiestakedst:Fl8YfMjOi44jQbhpUkNDbkoh@baversjo.cloudant.com/medical
 		
+		//Start fulkod/hårdkodning av användare osv..
+		Division surgery = new Division("surgery");
+		Division xray = new Division("xray");
+		Division quarantine = new Division("quarantine");
+		
+		Patient patient1 = new Patient("");
+		Patient patient2 = new Patient("");
+		Patient patient3 = new Patient("");
+		
+		Nurse nurse1 = new Nurse("Eva", surgery);
+		Nurse nurse2 = new Nurse("martin", xray);
+		Nurse nurse3 = new Nurse("karin", quarantine);
+		
+		Doctor doctor = new Doctor("Peter", surgery);
+		Doctor doctor2 = new Doctor("Lars", quarantine);
+
+		//Slut fulkod.
+		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 		System.setProperty("javax.net.ssl.trustStorePassword", "qweqwe");
 		
