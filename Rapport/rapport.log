@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  26 FEB 2013 17:44
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  26 FEB 2013 19:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -403,25 +403,25 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \openout3 = `rapport.toc'.
 
 
-[1] [2] (./ssl.tex) (./certifikat.tex) (./sakerhetsutvardering.tex)
-(./referenser.tex) [3] (./rapport.aux) ) 
+[1] (./Introduktion.tex) (./bakgrund.tex) [2] (./ssl.tex) (./certifikat.tex)
+(./sakerhetsutvardering.tex) (./referenser.tex) [3] (./rapport.aux) ) 
 Here is how much of TeX's memory you used:
- 2253 strings out of 493633
- 29086 string characters out of 3143378
+ 2259 strings out of 493633
+ 29166 string characters out of 3143378
  86410 words of memory out of 3000000
  5513 multiletter control sequences out of 15000+200000
  11766 words of font info for 30 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 37i,6n,24p,727b,199s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2011/texmf-dist/fon
-ts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2011/texmf-dist/fonts
-/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2011/texmf-dist/fonts/t
-ype1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2011/texmf-dist/fonts/typ
-e1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1
-/public/cm-super/sfrm1000.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/p
-ublic/cm-super/sfrm1200.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/pub
-lic/cm-super/sfrm1728.pfb>
-Output written on rapport.pdf (4 pages, 496954 bytes).
+ 37i,6n,24p,752b,199s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/loca
+l/texlive/2011/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/
+texlive/2011/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/te
+xlive/2011/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texl
+ive/2011/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texliv
+e/2011/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/
+2011/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/20
+11/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb>
+Output written on rapport.pdf (4 pages, 496776 bytes).
 PDF statistics:
  43 PDF objects out of 1000 (max. 8388607)
  29 compressed objects within 1 object stream

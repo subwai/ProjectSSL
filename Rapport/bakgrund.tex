@@ -1,0 +1,24 @@
+\section{Bakgrund}
+
+Problemet som projektet grundar sig på är att skapa säkra medicinska journaler för ett sjukhus. Med säkra journaler menas i detta fall  journaler som är sekretessbelagda så att inte vem som helst kan ha tillgång till dem, det vill säga att patienternas integritet skyddas. Eftersom systemet är en produkt framtagen för riktig användning måste det begränsas så att olika grupper på sjukhuset har olika behörigheter till journalerna. Personer som inte har någon behörighet kommer aldrig att kunna nå journalerna. De olika grupper som ska finnas med är:
+
+\begin{enumerate}
+\item{Socialstyrelsen}
+\item{Läkare}
+\item{Sköterska}
+\item{Patienter}
+\end{enumerate} 
+
+
+\subsection{Socialstyrelsen}
+Socialstyrelsen är det organ som bestämmer, det vill säga de har befogenheter till att kunna ta bort samt lägga till journaler. 
+
+\subsection{Läkare}
+Läkaren kan däremot skriva och läsa färdiga journaler, förutsatt att han är den som tar hand om patienten. Han kan också läsa journaler som som finns på hans avdelning. Om patienten inte har någon journal har läkaren befogenheten till att skapa journalen. Kravet är då att läkaren själv är den som behandlar patienten.
+
+\subsection{Sköterska}
+Sköterskans rättigheter är att hon kan läsa och skriva till journalerna som hon är skriven på och att läsa alla journaler från hennes avdelning.
+
+\subsection{Patienter}
+Patienterna är berättigade till att läsa endast sina egna journaler vilket är en självklarhet.
+För att kunna spara allt som händer på journalerna ska en logg föras som visar vem som gjort vad i journalen samt vid vilken tidpunkt det hände.
