@@ -37,6 +37,8 @@ public class Server {
 		
 		Doctor doctor = new Doctor("Peter", surgery);
 		Doctor doctor2 = new Doctor("Lars", quarantine);
+		
+		Admin admin1 = new Admin("Socialstyrelsen");
 		//Slut fulkod.
 		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
@@ -82,6 +84,10 @@ public class Server {
 			}
 			socket.close();
 		}
+	}
+	
+	public void deleteRecord(Record record, Person person){
+		
 	}
 	private static void printSocketInfo(SSLSocket s) {
 	      System.out.println("Socket class: "+s.getClass());
