@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  27 FEB 2013 11:43
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  27 FEB 2013 16:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -403,19 +403,19 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \openout3 = `rapport.toc'.
 
 
-[1] (./Introduktion.tex) (./bakgrund.tex) [2] (./ssl.tex)
-Overfull \hbox (87.63046pt too wide) in paragraph at lines 2--46
+[1] (./Introduktion.tex) (./bakgrund.tex) [2] (./ssl.tex
+Overfull \hbox (87.63046pt too wide) in paragraph at lines 3--6
 \T1/cmr/m/n/10 ren-sen: http://docs.oracle.com/javase/7/docs/technotes/guides/s
 ecurity/jsse/JSSERefGuide.html].
  []
 
-(./certifikat.tex) (./sakerhetsutvardering.tex) (./referenser.tex) [3]
+) (./certifikat.tex) (./sakerhetsutvardering.tex) (./referenser.tex) [3]
 (./rapport.aux) ) 
 Here is how much of TeX's memory you used:
- 2259 strings out of 493633
- 29166 string characters out of 3143378
+ 2264 strings out of 493633
+ 29232 string characters out of 3143378
  86410 words of memory out of 3000000
- 5513 multiletter control sequences out of 15000+200000
+ 5518 multiletter control sequences out of 15000+200000
  11766 words of font info for 30 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
  37i,6n,24p,828b,199s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -427,7 +427,7 @@ bx1200.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/cm-super/sfbx
 00.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/cm-super/sfrm1200
 .pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/cm-super/sfrm1728.p
 fb>
-Output written on rapport.pdf (4 pages, 498355 bytes).
+Output written on rapport.pdf (4 pages, 500112 bytes).
 PDF statistics:
  43 PDF objects out of 1000 (max. 8388607)
  29 compressed objects within 1 object stream
