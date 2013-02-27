@@ -1,2 +1,15 @@
 \section{SSL/ TLS}
-SSL är ett väldigt väl använt protokoll som man finner på nätet när en säker anslutning krävs. Med SSL förhindrar man tjuvlyssning på nätverket, vilket är en viktig faktor som gör protokollet säkert. Protokollet befinner sig mellan de två översta lagren i TCP/IP modellen, transportlagret och applikationslagret. Eftersom protkollet används för säkra anslutningar på nätet faller det i sin natur att SSL används mesta dels i Hypertext Transfer Protocol (HTTP) [första referensen: http://docs.oracle.com/javase/7/docs/technotes/guides/security/jsse/JSSERefGuide.html]. Många andra applikationer kan dra nytta av SSLs säkra anslutningar, några av dem är Telnet och FTP. 
+
+SSL är ett väldigt väl använt protokoll som man finner på nätet när en säker anslutning krävs. Med SSL förhindrar man tjuvlyssning på nätverket, vilket är en viktig faktor som gör protokollet säkert. Protokollet befinner sig mellan de två översta lagren i TCP/IP modellen, transportlagret och applikationslagret. Eftersom protkollet används för säkra anslutningar på nätet faller det i sin natur att SSL används mestadels i Hypertext Transfer Protocol (HTTP) [första referensen: http://docs.oracle.com/javase/7/docs/technotes/guides/security/jsse/JSSERefGuide.html]. Många andra applikationer kan dra nytta av SSLs säkra anslutningar, några av dem är Telnet och FTP. 
+SSL använder sig både av symmetrisk nyckel och asymmetrisk nyckel. De symmetriska nycklarna kan med hjälp av digitala signaturer göra datan som skickas över privat och på så sett tillgodoge data integritet.
+När SSL använder asymmetriska nycklar så görs detta för att kunna autentisera klienter respektive servrar. När protokollet gör detta betyder det att protokollet startar sin "handshake" metod. Utöver själva autentiseringen av server till klien så tillhandager "handshake" också:
+
+\begin{enumerate}
+\item{Fastställa vilka algoritmer som ska användas}
+\item{Förhandla om vilka nycklar krypteringen skall använda samt vilken MAC som skall användas}
+\item{Autentisera klienten till servern, vilket inte är nödvändigt}
+\end{enumerate}
+
+Eftersom denna "handshake" kan bestå av delar eller hela meddelande cyklar, beskriver vi hur vårt system använder sig av dessa meddelanden i vår "handshade" metod.
+
+\subsection{Handshake}
