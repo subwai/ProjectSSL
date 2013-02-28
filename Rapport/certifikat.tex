@@ -1,1 +1,11 @@
-Teknisk beskrivning av certifikat och vi använder det i vårt system.
+\section{Certifikat}
+Ett certifikat är ett elektroniskt dokument som som änvänds för att kunna bekräfta någons identitet på nätet. Certifikatet har en publik nyckel (publik) som man binder till en användares namn, address m.m. 
+Utöver detta finns det information om utfärdaren av certifikatet. 
+För att kunna använda certifikat behövs det ett "överhuvud" som alla ska kunna lita på. 
+Dessa överhuvuden är CAs, Certificate Authorities. 
+
+En CA utfärdar certifikat som andra kan använda för visa att de är pålitliga på nätet. För att två parter ska kunna lita på varandra måste använda sig av certifikat som är utfärdade av samma CA. Idag finns det enstaka stora organ som tillhandahåller certifikat till nästan alla olika tjänster, dessa är VeriSign Inc och Comodo  [ referens wiki: \url{http://en.wikipedia.org/wiki/Certificate_authority} ]
+
+För att kunna ge ett bra exempel på detta så tänker vi oss en webbläsare som väldigt många använder. Webbläsaren måste ha ett certifikat utfärdat av samma myndighet som hemsidan har för att man ska kunna lita på att sidan utan att ha besökt den tidigare. Hemsidans certifikat kan bestå av en certifikatkedja, vilket betyder att man skapat en koppling mellan sitt eget certifikat och CA certifikatet [Boken sida 291]. Skulle det inte vara så och sidan saknar certifikatet kommer användaren bli varnad eftersom man inte kan uppge identiteten för hemsidan.
+
+\subsection{Certifikat använda i SSL}
