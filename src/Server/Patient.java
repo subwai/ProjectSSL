@@ -9,14 +9,6 @@ public class Patient extends Person{
 		super(name);
 		recordlist = new ArrayList<Record>();
 	}
-	
-	public Access access(String name){
-		if(this.name.equals(name)){
-			return Access.READ;
-		}else{
-			return Access.NOACCESS;
-		}
-	}
 
 	public boolean hasReadAccess(Record r) {
 		if (r.getPatient() == this) return true;
