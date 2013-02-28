@@ -21,6 +21,7 @@ import javax.naming.ldap.Rdn;
 
 public class Server {
 	private static ArrayList<Record> records;
+	private static ArrayList<Person> users;
 	
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException, KeyManagementException, InvalidNameException{
 		int port = 1337;
@@ -28,18 +29,17 @@ public class Server {
 		
 		//Start fulkod/hårdkodning av användare osv..
 		records = new ArrayList<Record>();
-
+		users = new ArrayList<Person>();
+		
 		Division surgery = new Division("surgery");
 		Division xray = new Division("xray");
 		Division quarantine = new Division("quarantine");
-		
-		Patient patient1 = new Patient("");
-		
-		Nurse nurse1 = new Nurse("Eva", surgery);
-		
-		Doctor doctor = new Doctor("Peter", surgery);
-		
-		Admin admin1 = new Admin("Socialstyrelsen");
+			
+		users.add(new Patient("Johan"));
+		users.add(new Nurse("Mergim", surgery));
+		users.add(new Doctor("Sven", surgery));
+		users.add(new Admin("Adam"));
+
 		//Slut fulkod.
 		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
@@ -83,6 +83,8 @@ public class Server {
 			if(userName.length() > 0){//autheniticated. now authorize request.
 				System.out.println("user " + userName + " authenticated");
 			}
+			
+			
 			
 			socket.close();
 		}
