@@ -36,8 +36,8 @@ public class Server {
 		Division quarantine = new Division("quarantine");
 			
 		users.add(new Patient("Johan"));
-		users.add(new Nurse("Mergim", surgery));
-		users.add(new Doctor("Sven", surgery));
+		users.add(new Nurse("Sven", surgery));
+		users.add(new Doctor("Mergim", surgery));
 		users.add(new Admin("Adam"));
 
 		//Slut fulkod.
