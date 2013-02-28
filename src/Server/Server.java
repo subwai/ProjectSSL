@@ -13,12 +13,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
-
-import com.sun.tools.javac.util.List;
 
 public class Server {
 	private static ArrayList<Record> records;
@@ -89,12 +88,19 @@ public class Server {
 		}
 	}
 	
-	public List<Record> listRecords(){
-		
-		return null;
+	public List<Record> listRecords(final Person user){
+		return filter(records, new Predicate<Record>() {
+			public boolean apply(Record r) {
+				return user.hasReadAccess(r);
+			}
+		});
 	}
-	public List<Record> listRecords(String patient){
-		return null;
+	public List<Record> searchRecords(final Person user, final String patient){
+		return filter(records, new Predicate<Record>() {
+			public boolean apply(Record r) {
+				return user.hasReadAccess(r) && patient.equalsIgnoreCase(r.getPatient().getName());
+			}
+		});
 	}
 	
 	public boolean createRecord(Patient patient, Doctor doctor, Nurse nurse, Division div, String data){
@@ -104,23 +110,18 @@ public class Server {
 	public boolean deleteRecord(Record record, Person person){
 		return true;
 	}
-	private List<Record> searchRecords(Person person){
-		
-		
-		
-		if(person instanceof Patient){
-			
-		}else if(person instanceof Nurse){
-			
-		}else if(person instanceof Doctor){
-			
-		}else if(person instanceof Admin){
-			
-		}
-		
-		
-		return null;
+
+	
+	private <T> ArrayList<T> filter(ArrayList<T> target, Predicate<T> predicate) {
+		ArrayList<T> result = new ArrayList<T>();
+	    for (T element: target) {
+	        if (predicate.apply(element)) {
+	            result.add(element);
+	        }
+	    }
+	    return result;
 	}
+	
 	private static void printSocketInfo(SSLSocket s) {
 	      System.out.println("Socket class: "+s.getClass());
 	      System.out.println("   Remote address = "

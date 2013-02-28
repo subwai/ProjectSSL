@@ -18,9 +18,10 @@ public class Nurse extends Person {
 		}
 	}
 
-	@Override
-	protected Person myType() {
-		return this;
+	public boolean hasReadAccess(Record r) {
+		if (r.getNurse() == this) return true;
+		if (r.getDivision() == division) return true;
+		return false;
 	}
 	
 }

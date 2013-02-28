@@ -19,8 +19,9 @@ public class Doctor extends Person {
 		}
 	}
 
-	@Override
-	protected Person myType() {
-		return this;
+	public boolean hasReadAccess(Record r) {
+		if (r.getDoctor() == this) return true;
+		if (r.getDivision() == division) return true;
+		return false;
 	}
 }

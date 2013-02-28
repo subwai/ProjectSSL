@@ -35,27 +35,5 @@ public class Record {
 	public Division getDivision() {
 		return division;
 	}
-	
-	public boolean hasReadAccess(Person person){
-		if(person == patient){
-			return true;
-
-		}
-		if(person == nurse){
-			return true;
-
-		}
-		if(person == doctor){
-			return true;
-
-		}
-		if(person instanceof Admin){
-			return true;
-		}
-	}
-	
-	public boolean hasWriteAccess)Person person)
-	
-	
-	
+		
 }

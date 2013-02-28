@@ -18,9 +18,9 @@ public class Patient extends Person{
 		}
 	}
 
-	@Override
-	protected Person myType() {
-		return this;
+	public boolean hasReadAccess(Record r) {
+		if (r.getPatient() == this) return true;
+		return false;
 	}
 
 }

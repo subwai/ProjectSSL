@@ -10,10 +10,8 @@ public class Admin extends Person{
 		return Access.ADMIN;
 	}
 
-	@Override
-	protected Person myType() {
-		// TODO Auto-generated method stub
-		return this;
+	public boolean hasReadAccess(Record r) {
+		return true;
 	}
 	
 }

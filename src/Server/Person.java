@@ -10,5 +10,6 @@ public abstract class Person{
 	public String getName(){
 		return name;
 	}
-	protected abstract Person myType();
+	
+	public abstract boolean hasReadAccess(Record r);
 }
