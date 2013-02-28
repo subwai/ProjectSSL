@@ -12,17 +12,33 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 
+import com.sun.tools.javac.util.List;
+
 public class Server {
+	private static ArrayList<Patient> patients;
+	private static ArrayList<Record> records;
+	private static ArrayList<Doctor> doctors;
+	private static ArrayList<Nurse> nurses;
+
+	
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException, KeyManagementException, InvalidNameException{
 		int port = 1337;
 		//"https://ytoucksandsoffiestakedst:Fl8YfMjOi44jQbhpUkNDbkoh@baversjo.cloudant.com/medical
 		
 		//Start fulkod/hårdkodning av användare osv..
+		records = new ArrayList<Record>();
+		doctors = new ArrayList<Doctor>();
+		nurses = new ArrayList<Nurse>();
+		patients = new ArrayList<Patient>();
+
+
+		
 		Division surgery = new Division("surgery");
 		Division xray = new Division("xray");
 		Division quarantine = new Division("quarantine");
@@ -39,6 +55,17 @@ public class Server {
 		Doctor doctor2 = new Doctor("Lars", quarantine);
 		
 		Admin admin1 = new Admin("Socialstyrelsen");
+		
+		patients.add(patient1);
+		patients.add(patient2);
+		patients.add(patient3);
+		
+		doctors.add(doctor);
+		doctors.add(doctor2);
+		
+		nurses.add(nurse1);
+		nurses.add(nurse2);
+		nurses.add(nurse3);
 		//Slut fulkod.
 		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
@@ -86,8 +113,19 @@ public class Server {
 		}
 	}
 	
-	public void deleteRecord(Record record, Person person){
-		
+	public List<Record> listRecords(){
+		return null;
+	}
+	public List<Record> listRecords(Patient patient){
+		return null;
+	}
+	
+	public boolean createRecord(Patient patient, Doctor doctor, Nurse nurse, Division div, String data){
+		return true;
+	}
+	
+	public boolean deleteRecord(Record record, Person person){
+		return true;
 	}
 	private static void printSocketInfo(SSLSocket s) {
 	      System.out.println("Socket class: "+s.getClass());
