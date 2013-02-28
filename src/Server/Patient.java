@@ -1,5 +1,5 @@
 package Server;
-import java.util.*;
+import java.util.ArrayList;
 
 public class Patient extends Person{
 	private ArrayList<Record> recordlist;
@@ -10,6 +10,7 @@ public class Patient extends Person{
 		recordlist = new ArrayList<Record>();
 	}
 
+	@Override
 	public boolean hasReadAccess(Record r) {
 		if (r.getPatient() == this) return true;
 		return false;
