@@ -1,6 +1,6 @@
 package Server;
 
-public class Person{
+public abstract class Person{
 	protected String name;
 	
 	public Person(String name){
@@ -10,4 +10,5 @@ public class Person{
 	public String getName(){
 		return name;
 	}
+	protected abstract Person myType();
 }

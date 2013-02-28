@@ -9,5 +9,11 @@ public class Admin extends Person{
 	public Access access(){
 		return Access.ADMIN;
 	}
+
+	@Override
+	protected Person myType() {
+		// TODO Auto-generated method stub
+		return this;
+	}
 	
 }

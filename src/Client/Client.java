@@ -43,24 +43,20 @@ public class Client {
         } catch (Exception e) {
             throw new IOException(e.getMessage());
         }
-		System.out.println("bajs1");
 
         
 		SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
 		socket.setNeedClientAuth(true);
 		
 		printSocketInfo(socket);
-		System.out.println("bajs2");
 
 		socket.startHandshake();
-		System.out.println("bajs3");
 
 		String list = "list";
 		String create = "create";
 		String delete = "delete";
 		boolean input = true;
 		while(input){
-			System.out.println("Inläsning börjar!");
 			String command = scan.next();
 			if(command.equals(list)){
 				String patient = scan.next();
@@ -78,15 +74,15 @@ public class Client {
 				String division = scan.next();
 				String data = scan.next();
 				System.out.println("Skapar journal med: Patient(" + patient + ") " +
-						"Doctor(" + doctor + ") Nurse(" + nurse + ") Division" + division + ") Data(" + data + ")");
+						"Doctor(" + doctor + ") Nurse(" + nurse + ") Division (" + division + ") Data(" + data + ")");
 				//TODO metodanrop server! glöm ej kolla access doctor.
 			}else if(command.equals(delete)){
-				String record = scan.next();
-				System.out.println("Tar bort journal: " + record);
+				String recordID = scan.next();
+				System.out.println("Tar bort journal: " + recordID);
 				//TODO metodanrop server glöm ej kolla access admin!
 
 			}else{
-				System.out.println("Inget lästes");
+				System.out.println("Okänt kommando: " + command);
 			}
 			
 			

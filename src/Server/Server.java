@@ -21,11 +21,7 @@ import javax.naming.ldap.Rdn;
 import com.sun.tools.javac.util.List;
 
 public class Server {
-	private static ArrayList<Patient> patients;
 	private static ArrayList<Record> records;
-	private static ArrayList<Doctor> doctors;
-	private static ArrayList<Nurse> nurses;
-
 	
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, KeyStoreException, CertificateException, UnrecoverableKeyException, KeyManagementException, InvalidNameException{
 		int port = 1337;
@@ -33,39 +29,18 @@ public class Server {
 		
 		//Start fulkod/hårdkodning av användare osv..
 		records = new ArrayList<Record>();
-		doctors = new ArrayList<Doctor>();
-		nurses = new ArrayList<Nurse>();
-		patients = new ArrayList<Patient>();
 
-
-		
 		Division surgery = new Division("surgery");
 		Division xray = new Division("xray");
 		Division quarantine = new Division("quarantine");
 		
 		Patient patient1 = new Patient("");
-		Patient patient2 = new Patient("");
-		Patient patient3 = new Patient("");
 		
 		Nurse nurse1 = new Nurse("Eva", surgery);
-		Nurse nurse2 = new Nurse("martin", xray);
-		Nurse nurse3 = new Nurse("karin", quarantine);
 		
 		Doctor doctor = new Doctor("Peter", surgery);
-		Doctor doctor2 = new Doctor("Lars", quarantine);
 		
 		Admin admin1 = new Admin("Socialstyrelsen");
-		
-		patients.add(patient1);
-		patients.add(patient2);
-		patients.add(patient3);
-		
-		doctors.add(doctor);
-		doctors.add(doctor2);
-		
-		nurses.add(nurse1);
-		nurses.add(nurse2);
-		nurses.add(nurse3);
 		//Slut fulkod.
 		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
@@ -109,14 +84,16 @@ public class Server {
 			if(userName.length() > 0){//autheniticated. now authorize request.
 				System.out.println("user " + userName + " authenticated");
 			}
+			
 			socket.close();
 		}
 	}
 	
 	public List<Record> listRecords(){
+		
 		return null;
 	}
-	public List<Record> listRecords(Patient patient){
+	public List<Record> listRecords(String patient){
 		return null;
 	}
 	
@@ -126,6 +103,23 @@ public class Server {
 	
 	public boolean deleteRecord(Record record, Person person){
 		return true;
+	}
+	private List<Record> searchRecords(Person person){
+		
+		
+		
+		if(person instanceof Patient){
+			
+		}else if(person instanceof Nurse){
+			
+		}else if(person instanceof Doctor){
+			
+		}else if(person instanceof Admin){
+			
+		}
+		
+		
+		return null;
 	}
 	private static void printSocketInfo(SSLSocket s) {
 	      System.out.println("Socket class: "+s.getClass());

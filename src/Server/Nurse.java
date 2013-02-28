@@ -17,5 +17,10 @@ public class Nurse extends Person {
 			return Access.NOACCESS;
 		}
 	}
+
+	@Override
+	protected Person myType() {
+		return this;
+	}
 	
 }

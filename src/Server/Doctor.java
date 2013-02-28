@@ -18,4 +18,9 @@ public class Doctor extends Person {
 			return Access.NOACCESS;
 		}
 	}
+
+	@Override
+	protected Person myType() {
+		return this;
+	}
 }

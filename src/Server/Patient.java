@@ -18,4 +18,9 @@ public class Patient extends Person{
 		}
 	}
 
+	@Override
+	protected Person myType() {
+		return this;
+	}
+
 }
