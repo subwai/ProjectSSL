@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.naming.InvalidNameException;
@@ -74,33 +75,37 @@ public class Server {
 			X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
 			//extract CN from DN
 			LdapName ldapDN = new LdapName(cert.getSubjectDN().getName());
-			String userName = "";
+			String username = "";
 			for(Rdn rdn: ldapDN.getRdns()) {
 				if(rdn.getType().trim().toUpperCase().equals("CN")){
-					userName = rdn.getValue().toString().trim().toLowerCase();
+					username = rdn.getValue().toString().trim().toLowerCase();
 				}
 			}
-			if(userName.length() > 0){//autheniticated. now authorize request.
-				System.out.println("user " + userName + " authenticated");
+			if(username.length() > 0){//autheniticated. now authorize request.
+				System.out.println("user " + username + " authenticated");
 			}
 			
-			
+			Person p = filter(users, new Predicate<Person>(new String[]{username}) {
+				public boolean apply(Person p) {
+					return ((String)this.args[0]).equalsIgnoreCase(p.getName());
+				}
+			}).get(0);
 			
 			socket.close();
 		}
 	}
 	
-	public List<Record> listRecords(final Person user){
-		return filter(records, new Predicate<Record>() {
+	public List<Record> listRecords(Person user){
+		return filter(records, new Predicate<Record>(new Object[]{user}) {
 			public boolean apply(Record r) {
-				return user.hasReadAccess(r);
+				return ((Person)this.args[0]).hasReadAccess(r);
 			}
 		});
 	}
-	public List<Record> searchRecords(final Person user, final String patient){
-		return filter(records, new Predicate<Record>() {
+	public List<Record> searchRecords(Person user, String patient){
+		return filter(records, new Predicate<Record>(new Object[]{user, patient}) {
 			public boolean apply(Record r) {
-				return user.hasReadAccess(r) && patient.equalsIgnoreCase(r.getPatient().getName());
+				return ((Person)this.args[0]).hasReadAccess(r) && ((String)this.args[1]).equalsIgnoreCase(r.getPatient().getName());
 			}
 		});
 	}
@@ -114,7 +119,7 @@ public class Server {
 	}
 
 	
-	private <T> ArrayList<T> filter(ArrayList<T> target, Predicate<T> predicate) {
+	private static <T> ArrayList<T> filter(ArrayList<T> target, Predicate<T> predicate) {
 		ArrayList<T> result = new ArrayList<T>();
 	    for (T element: target) {
 	        if (predicate.apply(element)) {
