@@ -85,7 +85,7 @@ public class Server {
 				System.out.println("user " + username + " authenticated");
 			}
 			
-			Person p = filter(users, new Predicate<Person>(new String[]{username}) {
+			Person user = filter(users, new Predicate<Person>(new String[]{username}) {
 				public boolean apply(Person p) {
 					return ((String)this.args[0]).equalsIgnoreCase(p.getName());
 				}
