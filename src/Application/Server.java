@@ -29,9 +29,7 @@ import javax.net.ssl.SSLSocket;
 import javax.security.cert.X509Certificate;
 
 public class Server{
-	private static ArrayList<Record> records;
-	private static ArrayList<Person> users;
-	private static ArrayList<Division> divisions;
+
 
 	public static void main(String[] args) throws IOException,
 			NoSuchAlgorithmException, KeyStoreException, CertificateException,
@@ -57,24 +55,9 @@ public class Server{
             e.printStackTrace();  
         } catch (IOException e) {  
             e.printStackTrace();  
-        } 
-		
-		records = new ArrayList<Record>();
-		users = new ArrayList<Person>();
+        }
 
-		Division surgery = new Division("surgery");
-		Division xray = new Division("xray");
-		Division quarantine = new Division("quarantine");
-		divisions.add(surgery);
-		divisions.add(xray);
-		divisions.add(quarantine);
-		
-		users.add(new Patient("Johan"));
-		users.add(new Nurse("Sven", surgery));
-		users.add(new Doctor("Mergim", surgery));
-		users.add(new Admin("socialstyrelsen"));
-
-		RecordHandler RH = new RecordHandler(records, users, divisions);
+		RecordHandler RH = new RecordHandler();
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 
@@ -115,7 +98,7 @@ public class Server{
 						username = rdn.getValue().toString().trim().toLowerCase();
 					}
 				}
-				ArrayList<Person> pArr = RecordHandler.filter(users,
+				ArrayList<Person> pArr = RecordHandler.filter(RH.getUsers(),
 						new Predicate<Person>(new String[] { username }) {
 							@Override
 							public boolean apply(Person p) {

@@ -4,14 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecordHandler {
-	private ArrayList<Division> divisions;
-	ArrayList<Record> records;
-	ArrayList<Person> users;
+	private static ArrayList<Record> records;
+	private static ArrayList<Person> users;
+	private static ArrayList<Division> divisions;
 	
-	public RecordHandler(ArrayList<Record> records, ArrayList<Person> users, ArrayList<Division> divisions){
-		this.divisions = divisions;
-		this.records = records;
-		this.divisions = divisions;
+	public RecordHandler(){
+		records = new ArrayList<Record>();
+	 	 
+	    users = new ArrayList<Person>();
+	 	 	
+	    divisions = new ArrayList<Division>();
+	    Division surgery = new Division("surgery");
+	    Division xray = new Division("xray");
+	    Division quarantine = new Division("quarantine");
+	    divisions.add(surgery);
+	    divisions.add(xray);
+	    divisions.add(quarantine);
+	    users.add(new Patient("Johan"));
+	    users.add(new Nurse("Sven", surgery));
+	    users.add(new Doctor("Mergim", surgery));	
+	    users.add(new Admin("socialstyrelsen"));
+	}
+	public ArrayList<Person> getUsers(){
+		return users;
 	}
 	
 	public int createRecord(String patient, String doctor, String nurse,
