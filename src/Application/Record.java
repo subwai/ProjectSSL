@@ -1,4 +1,4 @@
-package Server;
+package Application;
 
 public class Record {
 	private Patient patient;

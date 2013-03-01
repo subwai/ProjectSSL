@@ -1,4 +1,4 @@
-package Server;
+package Application;
 import java.util.ArrayList;
 
 public class Patient extends Person{

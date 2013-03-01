@@ -1,4 +1,4 @@
-package Client;
+package Application;
 
 import java.io.*;
 import java.net.ConnectException;
@@ -74,8 +74,9 @@ public class Client {
 		
 		//printSocketInfo(socket);
 
+		System.out.print("Connecting to server..  ");
 		socket.startHandshake();
-		System.out.println("Connected to server");
+		System.out.println("Connected");
 
 		String list = "list";
 		String create = "create";

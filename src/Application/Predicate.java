@@ -1,4 +1,4 @@
-package Server;
+package Application;
 
 public abstract class Predicate<T> {
 	protected Object[] args;

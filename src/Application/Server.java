@@ -1,4 +1,4 @@
-package Server;
+package Application;
 
 import java.io.FileInputStream;
 import java.io.IOException;

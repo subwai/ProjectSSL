@@ -1,4 +1,4 @@
-package Server;
+package Application;
 
 public class Division {
 	private String name;

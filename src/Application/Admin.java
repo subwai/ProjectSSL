@@ -1,4 +1,4 @@
-package Server;
+package Application;
 
 public class Admin extends Person {
 

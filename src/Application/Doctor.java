@@ -1,4 +1,4 @@
-package Server;
+package Application;
 
 public class Doctor extends Person {
 	private Division division;

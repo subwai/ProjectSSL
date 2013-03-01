@@ -1,4 +1,4 @@
-package Server;
+package Application;
 
 public abstract class Person {
 	protected String name;
