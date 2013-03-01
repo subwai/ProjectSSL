@@ -1,7 +1,10 @@
 package Application;
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -22,7 +25,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.security.cert.X509Certificate;
 
-public class Server {
+public class Server{
 	private static ArrayList<Record> records;
 	private static ArrayList<Person> users;
 
@@ -31,9 +34,7 @@ public class Server {
 			UnrecoverableKeyException, KeyManagementException,
 			InvalidNameException {
 		int port = 1337;
-		// "https://ytoucksandsoffiestakedst:Fl8YfMjOi44jQbhpUkNDbkoh@baversjo.cloudant.com/medical
-
-		// Start hårdkodning av användare osv..
+		
 		records = new ArrayList<Record>();
 		users = new ArrayList<Person>();
 
@@ -72,38 +73,51 @@ public class Server {
 		System.out.println("Server started and accepting connections on port "
 				+ port);
 		printServerSocketInfo(s);
+		SSLSocket socket = null;
 		while (true) {
-			SSLSocket socket = (SSLSocket) s.accept();
-			socket.setNeedClientAuth(true);
-			printSocketInfo(socket);
-			SSLSession session = socket.getSession();
-			X509Certificate cert = session.getPeerCertificateChain()[0];
-			// extract CN from DN
-			LdapName ldapDN = new LdapName(cert.getSubjectDN().getName());
-			String username = "";
-			for (Rdn rdn : ldapDN.getRdns()) {
-				if (rdn.getType().trim().toUpperCase().equals("CN")) {
-					username = rdn.getValue().toString().trim().toLowerCase();
+			try{
+				socket = (SSLSocket) s.accept();
+				socket.setNeedClientAuth(true);
+				printSocketInfo(socket);
+				SSLSession session = socket.getSession();
+				X509Certificate cert = session.getPeerCertificateChain()[0];
+				// extract CN from DN
+				LdapName ldapDN = new LdapName(cert.getSubjectDN().getName());
+				String username = "";
+				for (Rdn rdn : ldapDN.getRdns()) {
+					if (rdn.getType().trim().toUpperCase().equals("CN")) {
+						username = rdn.getValue().toString().trim().toLowerCase();
+					}
+				}
+	
+				ArrayList<Person> pArr = filter(users,
+						new Predicate<Person>(new String[] { username }) {
+							@Override
+							public boolean apply(Person p) {
+								return ((String) this.args[0]).equalsIgnoreCase(p
+										.getName());
+							}
+						});
+				
+				socket.setKeepAlive(true);
+				
+				if(pArr.size() > 0){
+					Person person = pArr.get(0);
+					System.out.println("user " + username + " connected as " + person.getClass().getSimpleName());
+					ServerConnection sc = new ServerConnection(socket,person);
+					sc.run();
+					
+				}else{
+					System.out.println("ERROR: Unknown user. ");
+					socket.close();
+				}
+			}catch(Exception ex){
+				System.err.println("ERROR accepting socket connection");
+				ex.printStackTrace();
+				if(socket != null){
+					socket.close();
 				}
 			}
-
-			ArrayList<Person> pArr = filter(users,
-					new Predicate<Person>(new String[] { username }) {
-						@Override
-						public boolean apply(Person p) {
-							return ((String) this.args[0]).equalsIgnoreCase(p
-									.getName());
-						}
-					});
-			
-			if(pArr.size() > 0){
-				Person p = pArr.get(0);
-				System.out.println("user " + username + " authenticated as " + p.getClass().getSimpleName());
-			}else{
-				System.out.println("ERROR: Unknown user. ");
-			}
-			
-			socket.close();
 		}
 	}
 

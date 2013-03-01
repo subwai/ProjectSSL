@@ -2,10 +2,14 @@ package Application;
 
 import java.io.*;
 import java.net.ConnectException;
+import java.net.SocketException;
 
 import javax.net.ssl.*;
 
 import java.util.*;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.security.KeyStore;
 
@@ -77,72 +81,104 @@ public class Client {
 		System.out.print("Connecting to server..  ");
 		socket.startHandshake();
 		System.out.println("Connected");
-
-		String list = "list";
-		String create = "create";
-		String delete = "delete";
-		String exit = "exit";
-		boolean input = true;
-		while(input){
-			System.out.println("Possible commands: list, create, delete, exit.");
-			String command = scan.next();
-			if(command.equals(list)){
-				String patient = scan.next();
-				if(patient.equalsIgnoreCase("all")){
-					System.out.println("TODO: command List all");
-				}else{
-					System.out.println("TODO: List all with patient: " + patient);
+		String help = "\n\nPossible commands:" +
+				"\n\tlist patient|all" +
+				"\n\tcreate patient doctor nurse division data" +
+				"\n\tdelete patient" +
+				"\n\thelp" +
+				"\n\texit\n";
+		
+		try{
+			System.out.println(help);
+			
+			while(true){
+				System.out.print("hc>");
+				String command = scan.next();
+				Request req = new Request();
+				if(command.equals("list")){
+					String patient = scan.next();
+					req.action = "list";
+					req.args.add(patient);//all or id
+				}else if(command.equals("create")){
+					req.action = "create";
+					String patient = scan.next();
+					String doctor = scan.next();
+					String nurse = scan.next();
+					String division = scan.next();
+					String data = scan.next();
+					req.args.add(patient);
+					req.args.add(doctor);
+					req.args.add(nurse);
+					req.args.add(division);
+					req.args.add(data);
+				}else if(command.equals("delete")){
+					String record = scan.next();
+					req.action = "delete";
+					req.args.add(record);
+	
+				}else if(command.equals("help")){
+					System.out.println(help);
+					continue;
+				}else if(command.equals("exit")){
+					break;
 				}
-			}else if(command.equals(create)){
-				String patient = scan.next();
-				String doctor = scan.next();
-				String nurse = scan.next();
-				String division = scan.next();
-				String data = scan.next();
-				System.out.println("Skapar journal med: Patient(" + patient + ") " +
-						"Doctor(" + doctor + ") Nurse(" + nurse + ") Division" + division + ") Data(" + data + ")");
-				//TODO metodanrop server! glšm ej kolla access doctor.
-			}else if(command.equals(delete)){
-				String record = scan.next();
-				System.out.println("TODO: Remove record: " + record);
-
-			}else if(command.equals(exit)){
-				break;
+				else{
+					System.out.println("Error: Unknown command");
+				}
+				Response resp = request(req);
+				System.out.println(resp.message);
 			}
-			else{
-				System.out.println("Error: Unknown command");
+		}catch(SocketException ex){
+			System.err.println("Could not execute: Disconnected from server");
+		}catch(IOException ex){
+			System.err.println(ex.getMessage());
+		}
+		System.out.println("Closing connection.");
+        socket.close();
+	}
+	
+	
+	private Response request(Request req) throws IOException, SocketException{
+		Response response = null;
+		try{
+			PrintWriter out = new PrintWriter(
+	                new BufferedWriter(
+	                new OutputStreamWriter(
+	                socket.getOutputStream())));
+			
+			BufferedReader in = new BufferedReader(
+	                new InputStreamReader(
+	                socket.getInputStream()));
+			
+			Gson gson = new Gson();
+			String json = gson.toJson(req);
+
+	        out.println("REQUEST");
+	        out.println(json.length());
+			out.println(json);
+			out.flush();
+			
+			while(!in.readLine().equals("RESPONSE")){
+				System.err.println("proto error");
+				continue;
+			}
+
+        	int length = Integer.parseInt(in.readLine());
+        	StringBuilder sb = new StringBuilder();
+        	while(length > sb.length()){
+        		sb.append(in.readLine());
+        	}
+			String respStr = sb.toString();
+	        response = gson.fromJson(sb.toString(), Response.class);
+	        
+		}catch(JsonSyntaxException ex){
+			if(ex.getCause() != null){
+				throw (SocketException)ex.getCause();
+			}else{
+				throw new IOException("Could not parse server response");
 			}
 		}
-		
-		PrintWriter out = new PrintWriter(
-                new BufferedWriter(
-                new OutputStreamWriter(
-                socket.getOutputStream())));
-		
-		out.println("GET " + path + " HTTP/1.0");
-		out.println();
-		out.flush();
-		
-		/*
-         * Make sure there were no surprises
-         */
-        if (out.checkError())
-            System.out.println(
-                "SSLSocketClient: java.io.PrintWriter error");
-
-        /* read response */
-        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(
-                                socket.getInputStream()));
-
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null)
-            System.out.println(inputLine);
-
-        in.close();
-        out.close();
-        socket.close();
+        return response;
 	}
 
 	private static void printSocketInfo(SSLSocket s) {
