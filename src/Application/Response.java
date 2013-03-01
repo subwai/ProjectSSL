@@ -29,10 +29,15 @@ public class Response {
 			String nurse = args.get(2);
 			String division = args.get(3);
 			String data = args.get(4);
-			message = String.format("should create new record with attributes:\n" +
-					"patient:%s doctor:%s nurse:%s division:%s\n" +
-					"data:%s",patient,doctor,nurse,division,data);
-			
+			if(createRecord(patient,doctor,nurse,data,division)){
+				message = String.format("should create new record with attributes:\n" +
+						"patient:%s doctor:%s nurse:%s division:%s\n" +
+						"data:%s",patient,doctor,nurse,division,data);
+			}else{
+				message = String.format("should create new record with attributes:\n" +
+						"patient:%s doctor:%s nurse:%s division:%s\n" +
+						"data:%s",patient,doctor,nurse,division,data);
+			}
 		}else if(action.equals("delete")){
 			String record = req.args.get(0);
 			message = "should delete record " + record;

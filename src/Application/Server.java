@@ -31,6 +31,7 @@ import javax.security.cert.X509Certificate;
 public class Server{
 	private static ArrayList<Record> records;
 	private static ArrayList<Person> users;
+	private static ArrayList<Division> divisions;
 
 	public static void main(String[] args) throws IOException,
 			NoSuchAlgorithmException, KeyStoreException, CertificateException,
@@ -38,12 +39,12 @@ public class Server{
 			InvalidNameException {
 		int port = 1337;
 		
-		Logger logger = Logger.getLogger("ServerLog");  
+		Logger logger = Logger.getLogger("src/ServerLog");  
         FileHandler fh; 
-        try {  
-              
+        int limit = 5000000;
+        try { 
             // This block configure the logger with handler and formatter  
-            fh = new FileHandler("src/ServerLog.log");  
+            fh = new FileHandler("src/ServerLog.log",limit,1,true);  
             logger.addHandler(fh);  
             //logger.setLevel(Level.ALL);  
             SimpleFormatter formatter = new SimpleFormatter();  
@@ -64,13 +65,16 @@ public class Server{
 		Division surgery = new Division("surgery");
 		Division xray = new Division("xray");
 		Division quarantine = new Division("quarantine");
-
+		divisions.add(surgery);
+		divisions.add(xray);
+		divisions.add(quarantine);
+		
 		users.add(new Patient("Johan"));
 		users.add(new Nurse("Sven", surgery));
 		users.add(new Doctor("Mergim", surgery));
 		users.add(new Admin("socialstyrelsen"));
 
-		
+		RecordHandler RH = new RecordHandler(records, users, divisions);
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 
@@ -167,8 +171,35 @@ public class Server{
 		});
 	}
 
-	public boolean createRecord(Patient patient, Doctor doctor, Nurse nurse,
-			Division div, String data) {
+	public boolean createRecord(String patient, String doctor, String nurse,
+			String division, String data) {
+		Patient p = null;
+		Doctor d = null;
+		Nurse n = null;
+		Division div = null;
+		for(Person per : users){
+			if(per.getName().equals(patient) && per instanceof Patient){
+				p=(Patient)per;
+			}else if(per.getName().equals(doctor) && per instanceof Doctor){
+				d=(Doctor)per;
+			}else if(per.getName().equals(nurse) && per instanceof Doctor){
+				n=(Nurse)per;
+			}
+		}
+		if(p==null){
+			p = new Patient(patient);
+			users.add(p);
+		}
+		for(Division divi : divisions){
+			if(divi.getName().equals(division)){
+				div=divi;
+			}
+		}
+		if(d==null)return false;
+		if(n==null)return false;
+		if(div==null)return false;
+		Record record = new Record(p,d,n,data,div);
+		records.add(record);
 		return true;
 	}
 
