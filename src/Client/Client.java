@@ -34,7 +34,7 @@ public class Client {
 		System.out.println("Enter username (e.g socialstyrelsen):");
 		String user = scan.next();
 		System.out.println("Enter password:");
-		String pass = scan.next();
+		char[] passphrase = readPassword(scan);
 		
 		SSLSocketFactory factory = null;
 		
@@ -42,7 +42,7 @@ public class Client {
             SSLContext ctx;
             KeyManagerFactory kmf;
             KeyStore ks;
-            char[] passphrase = pass.toCharArray();
+
 
             ctx = SSLContext.getInstance("TLS");
             kmf = KeyManagerFactory.getInstance("SunX509");
@@ -160,8 +160,14 @@ public class Client {
 	      System.out.println("   Cipher suite = "+ss.getCipherSuite());
 	      System.out.println("   Protocol = "+ss.getProtocol());
   }
-	public static char[] readPassword(){
-		Console cons = System.console();
-		return cons.readPassword();
+
+
+	private char[] readPassword(Scanner scan) throws IOException {
+	    if (System.console() != null){
+	        return System.console().readPassword();
+	    }else{
+	    	return scan.next().toCharArray();
+	    }
+	    
 	}
 }

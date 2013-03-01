@@ -20,19 +20,20 @@ public class Record {
 		return data;
 	}
 
-	public Patient getPatient() {
-		return patient;
-	}
-
-	public Nurse getNurse() {
-		return nurse;
+	public Division getDivision() {
+		return division;
 	}
 
 	public Doctor getDoctor() {
 		return doctor;
 	}
 
-	public Division getDivision() {
-		return division;
+	public Nurse getNurse() {
+		return nurse;
 	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
 }

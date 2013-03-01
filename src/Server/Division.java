@@ -2,12 +2,12 @@ package Server;
 
 public class Division {
 	private String name;
-	
-	public Division(String name){
+
+	public Division(String name) {
 		this.name = name;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
 
