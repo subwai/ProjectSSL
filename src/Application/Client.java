@@ -1,17 +1,25 @@
 package Application;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.SocketException;
+import java.security.KeyStore;
+import java.util.Scanner;
 
-import javax.net.ssl.*;
-
-import java.util.*;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-
-import java.security.KeyStore;
 
 public class Client {
 	private SSLSocket socket;
@@ -29,7 +37,6 @@ public class Client {
 	private void run() throws IOException {
 		String host = "localhost";
 		int port = 1337;
-		String path = "";
 		Scanner scan = new Scanner(System.in);
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
@@ -164,7 +171,6 @@ public class Client {
 			while (length > sb.length()) {
 				sb.append(in.readLine());
 			}
-			String respStr = sb.toString();
 			response = gson.fromJson(sb.toString(), Response.class);
 
 		} catch (JsonSyntaxException ex) {
@@ -177,6 +183,7 @@ public class Client {
 		return response;
 	}
 
+	@SuppressWarnings("unused")
 	private static void printSocketInfo(SSLSocket s) {
 		System.out.println("Socket class: " + s.getClass());
 		System.out.println("   Remote address = "
