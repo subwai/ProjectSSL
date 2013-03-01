@@ -13,6 +13,10 @@ För att en användare ska kunna ansluta sig till en hemsida måste de autentise
 Det händer också att "falska" sidor tar denna nyckeln och påstår att denna är deras. För att undkomma detta problem krypteras informationen som kräver den rätta privata nyckeln för att dekryptera informationen.
 För att kunna skapa och hantera certifikaten rätt har man tagit fram standarder för detta. En standard som används väldigt väl och som vi använt till vårt projekt är X.509.
 
+\subsection{Autentisering - Projekt}
+
+//TODO Skriva om hur vi autentiserar oss på projektet!!!!!!!!!!                                           
+
 \subsection{SSL Certifikat}
 Eftersom vi använder oss av SSL i vår nätverksanslutning mellan klient och server så kommer det finnas inbakade SSL certifikat som SSL kommer använda vid 'handshake' fasen. Det som händer då är att SSL certifikatet innehar krypteringsnycklarna som ska säkra uppkopplingen, som respektive nod skickar till sin uppkopplingsnod [referens: \url{http://msdn.microsoft.com/en-us/library/windows/desktop/aa364691%28v=vs.85%29.aspx}. På så sätt delar de krypteringsnycklar i en 'handshake' mellan varanda. Värt att notera är att servern skickar sitt certifikat till klienten men att klienten ska skicka sitt för att autentisera sig är frivilligt.
 
