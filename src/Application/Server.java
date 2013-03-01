@@ -42,7 +42,7 @@ public class Server{
 		Logger logger = Logger.getLogger("src/ServerLog");  
         FileHandler fh; 
         int limit = 5000000;
-        try { 
+        try {
             // This block configure the logger with handler and formatter  
             fh = new FileHandler("src/ServerLog.log",limit,1,true);  
             logger.addHandler(fh);  
@@ -115,8 +115,7 @@ public class Server{
 						username = rdn.getValue().toString().trim().toLowerCase();
 					}
 				}
-	
-				ArrayList<Person> pArr = filter(users,
+				ArrayList<Person> pArr = RecordHandler.filter(users,
 						new Predicate<Person>(new String[] { username }) {
 							@Override
 							public boolean apply(Person p) {
@@ -131,7 +130,7 @@ public class Server{
 					Person person = pArr.get(0);
 					System.out.println("user " + username + " connected as " + person.getClass().getSimpleName());
 					//start separate thread
-					ServerConnection sc = new ServerConnection(socket,person);
+					ServerConnection sc = new ServerConnection(socket,person, RH, logger);
 					Thread clientThread = new Thread(sc);
 					clientThread.setName("hc:"+person.getName());
 					clientThread.start();
@@ -150,73 +149,6 @@ public class Server{
 		}
 	}
 
-	public List<Record> listRecords(Person user) {
-		return filter(records, new Predicate<Record>(new Object[] { user }) {
-			@Override
-			public boolean apply(Record r) {
-				return ((Person) this.args[0]).hasReadAccess(r);
-			}
-		});
-	}
-
-	public List<Record> searchRecords(Person user, String patient) {
-		return filter(records, new Predicate<Record>(new Object[] { user,
-				patient }) {
-			@Override
-			public boolean apply(Record r) {
-				return ((Person) this.args[0]).hasReadAccess(r)
-						&& ((String) this.args[1]).equalsIgnoreCase(r
-								.getPatient().getName());
-			}
-		});
-	}
-
-	public boolean createRecord(String patient, String doctor, String nurse,
-			String division, String data) {
-		Patient p = null;
-		Doctor d = null;
-		Nurse n = null;
-		Division div = null;
-		for(Person per : users){
-			if(per.getName().equals(patient) && per instanceof Patient){
-				p=(Patient)per;
-			}else if(per.getName().equals(doctor) && per instanceof Doctor){
-				d=(Doctor)per;
-			}else if(per.getName().equals(nurse) && per instanceof Doctor){
-				n=(Nurse)per;
-			}
-		}
-		if(p==null){
-			p = new Patient(patient);
-			users.add(p);
-		}
-		for(Division divi : divisions){
-			if(divi.getName().equals(division)){
-				div=divi;
-			}
-		}
-		if(d==null)return false;
-		if(n==null)return false;
-		if(div==null)return false;
-		Record record = new Record(p,d,n,data,div);
-		records.add(record);
-		return true;
-	}
-
-	public boolean deleteRecord(Record record, Person person) {
-		return true;
-	}
-
-	private static <T> ArrayList<T> filter(ArrayList<T> target,
-			Predicate<T> predicate) {
-		ArrayList<T> result = new ArrayList<T>();
-		for (T element : target) {
-			if (predicate.apply(element)) {
-				result.add(element);
-			}
-		}
-		return result;
-	}
 
 	private static void printSocketInfo(SSLSocket s) {
 		System.out.println("Socket class: " + s.getClass());

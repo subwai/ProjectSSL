@@ -20,8 +20,7 @@ public class Client {
 	private BufferedReader in;
 	
 	public static void main(String[] args) throws IOException{
-		new Client();
-				
+		new Client();		
 	}
 	
 	public Client() throws IOException{

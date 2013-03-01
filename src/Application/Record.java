@@ -1,14 +1,16 @@
 package Application;
 
 public class Record {
+	private static int ID;
 	private Patient patient;
 	private Doctor doctor;
 	private Nurse nurse;
 	private String data;
 	private Division division;
 
-	public Record(Patient patient, Doctor doctor, Nurse nurse, String data,
+	public Record(int id, Patient patient, Doctor doctor, Nurse nurse, String data,
 			Division division) {
+		this.ID = id;
 		this.patient = patient;
 		this.data = data;
 		this.doctor = doctor;
@@ -34,6 +36,9 @@ public class Record {
 
 	public Patient getPatient() {
 		return patient;
+	}
+	public int getID(){
+		return ID;
 	}
 
 }

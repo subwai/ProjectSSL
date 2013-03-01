@@ -1,6 +1,7 @@
 package Application;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Response {
 	public String message;
@@ -8,7 +9,7 @@ public class Response {
 	
 	
 	//The purpuse of this function is to construct a message (and execute associated logic) which is returned to the client.
-	public void build(Request req){
+	public void build(Request req, RecordHandler RH, Logger logger){
 		
 		//TODO: insert function calls in each if case:
 		//I would recommend extracting the logic from Server into a db class or something
@@ -29,14 +30,13 @@ public class Response {
 			String nurse = args.get(2);
 			String division = args.get(3);
 			String data = args.get(4);
-			if(createRecord(patient,doctor,nurse,data,division)){
-				message = String.format("should create new record with attributes:\n" +
-						"patient:%s doctor:%s nurse:%s division:%s\n" +
-						"data:%s",patient,doctor,nurse,division,data);
+			int ID = RH.createRecord(patient,doctor,nurse,data,division);
+			if(ID>0){
+				message = String.format("Record created succesfully with id: " + ID + "\n" +
+						"And data \n" + "------------------------------------------------------------------- \n"
+						 + data);
 			}else{
-				message = String.format("should create new record with attributes:\n" +
-						"patient:%s doctor:%s nurse:%s division:%s\n" +
-						"data:%s",patient,doctor,nurse,division,data);
+				message = "Error: Could not create record, invalid input.";
 			}
 		}else if(action.equals("delete")){
 			String record = req.args.get(0);
