@@ -7,26 +7,26 @@ public class Database {
 	private static ArrayList<Record> records;
 	private static ArrayList<Person> users;
 	private static ArrayList<Division> divisions;
-	
-	public Database(){
-		records = new ArrayList<Record>(); 
-	    users = new ArrayList<Person>(); 	 	
-	    divisions = new ArrayList<Division>();
-	    
-	    Division surgery = new Division("surgery");
-	    Division xray = new Division("xray");
-	    Division quarantine = new Division("quarantine");
-	    divisions.add(surgery);
-	    divisions.add(xray);
-	    divisions.add(quarantine);
-	    
-	    users.add(new Patient("Johan"));
-	    users.add(new Nurse("Sven", surgery));
-	    users.add(new Doctor("Mergim", surgery));
-	    users.add(new Doctor("Adam", surgery));
-	    users.add(new Admin("socialstyrelsen"));
+
+	public Database() {
+		records = new ArrayList<Record>();
+		users = new ArrayList<Person>();
+		divisions = new ArrayList<Division>();
+
+		Division surgery = new Division("surgery");
+		Division xray = new Division("xray");
+		Division quarantine = new Division("quarantine");
+		divisions.add(surgery);
+		divisions.add(xray);
+		divisions.add(quarantine);
+
+		users.add(new Patient("Johan"));
+		users.add(new Nurse("Sven", surgery));
+		users.add(new Doctor("Mergim", surgery));
+		users.add(new Doctor("Adam", surgery));
+		users.add(new Admin("socialstyrelsen"));
 	}
-	
+
 	public Person searchUser(String username) {
 		ArrayList<Person> pArr = filter(users, new Predicate<Person>(
 				new String[] { username }) {
@@ -37,7 +37,7 @@ public class Database {
 		});
 		return pArr.size() > 0 ? pArr.get(0) : null;
 	}
-	
+
 	public List<Record> listRecords(Person user) {
 		return filter(records, new Predicate<Record>(new Object[] { user }) {
 			@Override
@@ -58,7 +58,7 @@ public class Database {
 			}
 		});
 	}
-	
+
 	public int createRecord(String patient, String doctor, String nurse,
 			String division, String data) {
 		Patient p = null;
@@ -93,22 +93,22 @@ public class Database {
 		if (div == null)
 			return -1;
 		
-		int size = records.size();
-		Record record = new Record(size, p, d, n, data, div);
+		int id = records.size() + 1;
+		Record record = new Record(id, p, d, n, div, data);
 		records.add(record);
-		return size;
+		return id;
 	}
-	
+
 	public boolean deleteRecord(int ID) {
-		for(Record r: records){
-			if(r.getID() == ID){
+		for (Record r : records) {
+			if (r.getID() == ID) {
 				records.remove(ID);
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	protected static <T> ArrayList<T> filter(ArrayList<T> target,
 			Predicate<T> predicate) {
 		ArrayList<T> result = new ArrayList<T>();

@@ -28,34 +28,33 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.security.cert.X509Certificate;
 
-public class Server{
-
+public class Server {
 
 	public static void main(String[] args) throws IOException,
 			NoSuchAlgorithmException, KeyStoreException, CertificateException,
 			UnrecoverableKeyException, KeyManagementException,
 			InvalidNameException {
 		int port = 1337;
-		
-		Logger logger = Logger.getLogger("src/ServerLog");  
-        FileHandler fh; 
-        int limit = 5000000;
-        try {
-            // This block configure the logger with handler and formatter  
-            fh = new FileHandler("src/ServerLog.log",limit,1,true);  
-            logger.addHandler(fh);  
-            //logger.setLevel(Level.ALL);  
-            SimpleFormatter formatter = new SimpleFormatter();  
-            fh.setFormatter(formatter);  
-              
-            // the following statement is used to log any messages  
-            logger.info("Server log initiated.");  
-              
-        } catch (SecurityException e) {  
-            e.printStackTrace();  
-        } catch (IOException e) {  
-            e.printStackTrace();  
-        }
+
+		Logger logger = Logger.getLogger("src/ServerLog");
+		FileHandler fh;
+		int limit = 5000000;
+		try {
+			// This block configure the logger with handler and formatter
+			fh = new FileHandler("src/ServerLog.log", limit, 1, true);
+			logger.addHandler(fh);
+			// logger.setLevel(Level.ALL);
+			SimpleFormatter formatter = new SimpleFormatter();
+			fh.setFormatter(formatter);
+
+			// the following statement is used to log any messages
+			logger.info("Server log initiated.");
+
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		Database db = new Database();
 
@@ -84,7 +83,7 @@ public class Server{
 		printServerSocketInfo(s);
 		SSLSocket socket = null;
 		while (true) {
-			try{
+			try {
 				socket = (SSLSocket) s.accept();
 				socket.setNeedClientAuth(true);
 				printSocketInfo(socket);
@@ -95,34 +94,36 @@ public class Server{
 				String username = "";
 				for (Rdn rdn : ldapDN.getRdns()) {
 					if (rdn.getType().trim().toUpperCase().equals("CN")) {
-						username = rdn.getValue().toString().trim().toLowerCase();
+						username = rdn.getValue().toString().trim()
+								.toLowerCase();
 					}
 				}
-				
+
 				socket.setKeepAlive(true);
 				Person user;
-				if((user = db.searchUser(username)) != null){
-					System.out.println("user " + username + " connected as " + user.getClass().getSimpleName());
-					//start separate thread
-					ServerConnection sc = new ServerConnection(socket, user, db, logger);
+				if ((user = db.searchUser(username)) != null) {
+					System.out.println("user " + username + " connected as "
+							+ user.getClass().getSimpleName());
+					// start separate thread
+					ServerConnection sc = new ServerConnection(socket, user,
+							db, logger);
 					Thread clientThread = new Thread(sc);
-					clientThread.setName("hc:"+user.getName());
+					clientThread.setName("hc:" + user.getName());
 					clientThread.start();
-					
-				}else{
+
+				} else {
 					System.out.println("ERROR: Unknown user. ");
 					socket.close();
 				}
-			}catch(Exception ex){
+			} catch (Exception ex) {
 				System.err.println("ERROR accepting socket connection");
 				ex.printStackTrace();
-				if(socket != null){
+				if (socket != null) {
 					socket.close();
 				}
 			}
 		}
 	}
-
 
 	private static void printSocketInfo(SSLSocket s) {
 		System.out.println("Socket class: " + s.getClass());

@@ -1,15 +1,15 @@
 package Application;
 
 public class Record {
-	private static int ID;
+	private int ID;
 	private Patient patient;
 	private Doctor doctor;
 	private Nurse nurse;
 	private String data;
 	private Division division;
 
-	public Record(int id, Patient patient, Doctor doctor, Nurse nurse, String data,
-			Division division) {
+	public Record(int id, Patient patient, Doctor doctor, Nurse nurse,
+			Division division, String data) {
 		this.ID = id;
 		this.patient = patient;
 		this.data = data;
@@ -40,5 +40,11 @@ public class Record {
 	public int getID(){
 		return ID;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "Id: " + ID + ", Patient: " + patient.getName() + ", Doctor: "
+				+ doctor.getName() + ", Nurse: " + nurse.getName()
+				+ ", Division: " + division.getName() + ", Data: " + data;
+	}
 }
