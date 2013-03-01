@@ -44,7 +44,7 @@ public class Server {
 		users.add(new Patient("Johan"));
 		users.add(new Nurse("Sven", surgery));
 		users.add(new Doctor("Mergim", surgery));
-		users.add(new Admin("Adam"));
+		users.add(new Admin("socialstyrelsen"));
 
 		// Slut fulkod.
 
@@ -86,18 +86,22 @@ public class Server {
 					username = rdn.getValue().toString().trim().toLowerCase();
 				}
 			}
-			if (username.length() > 0) { // autheniticated. now authorize request.
-				System.out.println("user " + username + " authenticated");
-			}
 
-			Person user = filter(users,
+			ArrayList<Person> pArr = filter(users,
 					new Predicate<Person>(new String[] { username }) {
 						@Override
 						public boolean apply(Person p) {
 							return ((String) this.args[0]).equalsIgnoreCase(p
 									.getName());
 						}
-					}).get(0);
+					});
+			
+			if(pArr.size() > 0){
+				Person p = pArr.get(0);
+				System.out.println("user " + username + " authenticated as " + p.getClass().getSimpleName());
+			}else{
+				System.out.println("ERROR: Unknown user. ");
+			}
 			
 			socket.close();
 		}
