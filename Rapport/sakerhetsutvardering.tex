@@ -1,6 +1,23 @@
 \section{Säkerhetsutvärdering}
-Säkerhetsutvärderingen av vårt program är väldigt viktigt. Denna del av rapporten kommer visa hur programmet skyddar sig mot diverse attacker samt vilka attacker som går att utföra. Dessa attacker ska sammanfattas och på så sätt får vi fram programmets säkerthet som helhet. 
+Att göra en säkerhetsutvärdering av progammet vi skrivit är vikigt. Denna del av rapporten kommer visa hur programmet skyddar sig mot diverse attacker samt vilka attacker som går att utföra. Dessa attacker ska sammanfattas och på så sätt får vi fram programmets säkerthet som helhet. 
 
-Klienterna som ska använda programmet ska bli tillförsedda med tillräcklig säkerhet så att möjligheten till intrång minskar. Klienterna ska även ha möjligheten att fela utan att bli utkastade ur programmet, vilket betyder att det inte gör så mycket om de råkar skriva fel kommando för en utskrift, redigering eller borttagning av information.
+Klienterna som ska använda programmet ska bli försedda med tillräcklig säkerhet så att möjligheten till intrång minskar. Klienterna ska även ha möjligheten att fela utan att bli utkastade ur programmet, vilket betyder att det inte gör så mycket om de råkar skriva fel kommando för en utskrift, redigering eller borttagning av information.
 
-Serverns uppgift är att se till så att klienten som ska ansluta sig är autentiserad. När klienten fått upp en säker anslutning så kommer servern att logga varje metod som klienten kallar på och dess resultat. Denna loggen är till för att kunna se över hur programmet beter sig och på så sätt kunna förhindra otillåten behandling av data.
+Serverns uppgift är att se till så att klienten som ska ansluta sig är autentiserad. När klienten fått upp en säker anslutning så kommer servern att logga varje metod som klienten kallar på och dess resultat. Denna logg är till för att kunna se över hur programmet beter sig och på så sätt kunna göra programmet säkrare vid framtida uppdateringar. Genom att göra så här kommer vi kunna förhindra otillåten behandling.
+
+Att attackera ett program kan göras på väldigt många olika sätt. Vi kommer utföra många av dem för att kunna få en översiktlig bild av hur säkert vårt program är. Värt att notera är att programmet är av version ett, det vill säga inga uppdateringar har gjorts. 
+
+De attacker som vi ska analysera är:
+
+\begin{itemize}
+\item{Eavesdropping}
+\item{Man In The Middle}
+\item{Spoofing Attacks}
+\item{Fishing Attack}
+\item{Brute Force Attacks}
+\item{Dictionary Attacks}
+\item{Time - Memory - Tradeoff - Attacks}
+\item{Replay - Attacks}
+\item{Buffer Overflow}
+\item{Human Factor}
+\end{itemize}
