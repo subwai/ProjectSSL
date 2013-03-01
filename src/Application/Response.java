@@ -9,7 +9,7 @@ public class Response {
 	
 	
 	//The purpuse of this function is to construct a message (and execute associated logic) which is returned to the client.
-	public void build(Request req, RecordHandler RH, Logger logger){
+	public void build(Request req, Database db, Logger logger){
 		
 		//TODO: insert function calls in each if case:
 		//I would recommend extracting the logic from Server into a db class or something
@@ -30,7 +30,7 @@ public class Response {
 			String nurse = args.get(2);
 			String division = args.get(3);
 			String data = args.get(4);
-			int ID = RH.createRecord(patient,doctor,nurse,data,division);
+			int ID = db.createRecord(patient,doctor,nurse,data,division);
 			if(ID>0){
 				message = String.format("Record created succesfully with id: " + ID + "\n" +
 						"And data \n" + "------------------------------------------------------------------- \n"

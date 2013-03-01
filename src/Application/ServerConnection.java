@@ -18,13 +18,13 @@ public class ServerConnection implements Runnable{
 	private Gson gson;
 	private BufferedReader in;
 	private PrintWriter out;
-	private RecordHandler RH;
+	private Database db;
 	private Logger logger;
 	
 	
-	public ServerConnection(Socket socket, Person p, RecordHandler RH, Logger logger) throws IOException{
+	public ServerConnection(Socket socket, Person p, Database db, Logger logger) throws IOException{
 		this.logger = logger;
-		this.RH = RH;
+		this.db = db;
 		this.socket = socket;
 		this.p = p;
 		this.gson = new Gson();
@@ -59,7 +59,7 @@ public class ServerConnection implements Runnable{
 		        Request req = gson.fromJson(sb.toString(),Request.class);
 		        
 		        Response resp = new Response();
-		        resp.build(req, RH, logger);
+		        resp.build(req, db, logger);
 				
 		        String json = gson.toJson(resp);
 		        out.println("RESPONSE");

@@ -57,7 +57,7 @@ public class Server{
             e.printStackTrace();  
         }
 
-		RecordHandler RH = new RecordHandler();
+		Database db = new Database();
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 
@@ -98,24 +98,15 @@ public class Server{
 						username = rdn.getValue().toString().trim().toLowerCase();
 					}
 				}
-				ArrayList<Person> pArr = RecordHandler.filter(RH.getUsers(),
-						new Predicate<Person>(new String[] { username }) {
-							@Override
-							public boolean apply(Person p) {
-								return ((String) this.args[0]).equalsIgnoreCase(p
-										.getName());
-							}
-						});
 				
 				socket.setKeepAlive(true);
-				
-				if(pArr.size() > 0){
-					Person person = pArr.get(0);
-					System.out.println("user " + username + " connected as " + person.getClass().getSimpleName());
+				Person user;
+				if((user = db.searchUser(username)) != null){
+					System.out.println("user " + username + " connected as " + user.getClass().getSimpleName());
 					//start separate thread
-					ServerConnection sc = new ServerConnection(socket,person, RH, logger);
+					ServerConnection sc = new ServerConnection(socket, user, db, logger);
 					Thread clientThread = new Thread(sc);
-					clientThread.setName("hc:"+person.getName());
+					clientThread.setName("hc:"+user.getName());
 					clientThread.start();
 					
 				}else{
