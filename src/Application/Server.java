@@ -13,6 +13,9 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
@@ -35,6 +38,26 @@ public class Server{
 			InvalidNameException {
 		int port = 1337;
 		
+		Logger logger = Logger.getLogger("ServerLog");  
+        FileHandler fh; 
+        try {  
+              
+            // This block configure the logger with handler and formatter  
+            fh = new FileHandler("src/ServerLog.log");  
+            logger.addHandler(fh);  
+            //logger.setLevel(Level.ALL);  
+            SimpleFormatter formatter = new SimpleFormatter();  
+            fh.setFormatter(formatter);  
+              
+            // the following statement is used to log any messages  
+            logger.info("Server log initiated.");  
+              
+        } catch (SecurityException e) {  
+            e.printStackTrace();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        } 
+		
 		records = new ArrayList<Record>();
 		users = new ArrayList<Person>();
 
@@ -47,7 +70,7 @@ public class Server{
 		users.add(new Doctor("Mergim", surgery));
 		users.add(new Admin("socialstyrelsen"));
 
-		// Slut fulkod.
+		
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 
