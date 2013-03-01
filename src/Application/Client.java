@@ -35,7 +35,6 @@ public class Client {
 		Scanner scan = new Scanner(System.in);
 		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
-		System.setProperty("javax.net.ssl.trustStorePassword", "qweqwe");
 		
 		System.out.println("Enter username (e.g socialstyrelsen):");
 		String user = scan.next();

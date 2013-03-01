@@ -10,7 +10,7 @@ import java.net.Socket;
 
 import com.google.gson.Gson;
 
-public class ServerConnection extends Thread{
+public class ServerConnection implements Runnable{
 	
 	private Socket socket;
 	private Person p;
@@ -38,34 +38,33 @@ public class ServerConnection extends Thread{
 	public void run(){
 		System.out.println("Starting thread for " + p.getName());
 		try{
-        
-        while(!out.checkError()){
-        	String msg = in.readLine();
-        	if(msg == null){
-        		break;
-        	}
-        	if(!msg.equals("REQUEST")){
-        		continue;
-        	}
-        	int length = Integer.parseInt(in.readLine());
-        	StringBuilder sb = new StringBuilder();
-        	while(length > sb.length()){
-        		sb.append(in.readLine());
-        	}
-	        Request req = gson.fromJson(sb.toString(),Request.class);
+	        while(!out.checkError()){
+	        	String msg = in.readLine();
+	        	if(msg == null){
+	        		break;
+	        	}
+	        	if(!msg.equals("REQUEST")){
+	        		continue;
+	        	}
+	        	int length = Integer.parseInt(in.readLine());
+	        	StringBuilder sb = new StringBuilder();
+	        	while(length > sb.length()){
+	        		sb.append(in.readLine());
+	        	}
+		        Request req = gson.fromJson(sb.toString(),Request.class);
+		        
+		        Response resp = new Response();
+		        resp.build(req);
+				
+		        String json = gson.toJson(resp);
+		        out.println("RESPONSE");
+		        out.println(json.length());
+				out.println(json);
+				out.flush();
+	        }
 	        
-	        Response resp = new Response();
-	        resp.build(req);
-			
-	        String json = gson.toJson(resp);
-	        out.println("RESPONSE");
-	        out.println(json.length());
-			out.println(json);
-			out.flush();
-        }
-        
-        System.err.println("Closing connection with " + p.getName());
-        socket.close();
+	        System.err.println("Closing connection with " + p.getName());
+	        socket.close();
 
 		}catch(IOException e){
 			System.err.println("Socket error in thread");

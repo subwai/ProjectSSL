@@ -50,7 +50,6 @@ public class Server{
 		// Slut fulkod.
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
-		System.setProperty("javax.net.ssl.trustStorePassword", "qweqwe");
 
 		SSLServerSocketFactory factory = null;
 
@@ -104,8 +103,11 @@ public class Server{
 				if(pArr.size() > 0){
 					Person person = pArr.get(0);
 					System.out.println("user " + username + " connected as " + person.getClass().getSimpleName());
+					//start separate thread
 					ServerConnection sc = new ServerConnection(socket,person);
-					sc.run();
+					Thread clientThread = new Thread(sc);
+					clientThread.setName("hc:"+person.getName());
+					clientThread.start();
 					
 				}else{
 					System.out.println("ERROR: Unknown user. ");
