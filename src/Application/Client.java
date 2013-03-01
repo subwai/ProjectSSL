@@ -16,6 +16,8 @@ import java.security.KeyStore;
 
 public class Client {
 	private SSLSocket socket;
+	private PrintWriter out;
+	private BufferedReader in;
 	
 	public static void main(String[] args) throws IOException{
 		new Client();
@@ -80,18 +82,30 @@ public class Client {
 
 		System.out.print("Connecting to server..  ");
 		socket.startHandshake();
+		socket.setKeepAlive(true);
+		
+		out = new PrintWriter(
+                new BufferedWriter(
+                new OutputStreamWriter(
+                socket.getOutputStream())));
+		
+		in = new BufferedReader(
+                new InputStreamReader(
+                socket.getInputStream()));
+		
+		
 		System.out.println("Connected");
 		String help = "\n\nPossible commands:" +
 				"\n\tlist patient|all" +
 				"\n\tcreate patient doctor nurse division data" +
-				"\n\tdelete patient" +
+				"\n\tdelete record" +
 				"\n\thelp" +
 				"\n\texit\n";
 		
 		try{
 			System.out.println(help);
 			
-			while(true){
+			while(!out.checkError()){
 				System.out.print("hc>");
 				String command = scan.next();
 				Request req = new Request();
@@ -118,20 +132,22 @@ public class Client {
 	
 				}else if(command.equals("help")){
 					System.out.println(help);
-					continue;
 				}else if(command.equals("exit")){
 					break;
 				}
 				else{
-					System.out.println("Error: Unknown command");
+					System.out.print("Error: Unknown command");
+					req.action="heartbeat";
 				}
-				Response resp = request(req);
-				System.out.println(resp.message);
+				if(req.action != null){
+					Response resp = request(req);
+					System.out.println(resp.message);
+				}
 			}
 		}catch(SocketException ex){
-			System.err.println("Could not execute: Disconnected from server");
+			System.err.println("\nUnexpectedly Disconnected from server");
 		}catch(IOException ex){
-			System.err.println(ex.getMessage());
+			System.err.println("\n"+ex.getMessage());
 		}
 		System.out.println("Closing connection.");
         socket.close();
@@ -141,14 +157,6 @@ public class Client {
 	private Response request(Request req) throws IOException, SocketException{
 		Response response = null;
 		try{
-			PrintWriter out = new PrintWriter(
-	                new BufferedWriter(
-	                new OutputStreamWriter(
-	                socket.getOutputStream())));
-			
-			BufferedReader in = new BufferedReader(
-	                new InputStreamReader(
-	                socket.getInputStream()));
 			
 			Gson gson = new Gson();
 			String json = gson.toJson(req);

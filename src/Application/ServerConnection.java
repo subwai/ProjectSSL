@@ -15,27 +15,31 @@ public class ServerConnection extends Thread{
 	private Socket socket;
 	private Person p;
 	private Gson gson;
+	private BufferedReader in;
+	private PrintWriter out;
 	
-	public ServerConnection(Socket socket, Person p){
+	
+	public ServerConnection(Socket socket, Person p) throws IOException{
 		this.socket = socket;
 		this.p = p;
 		this.gson = new Gson();
+		
+        in = new BufferedReader(
+                new InputStreamReader(
+                socket.getInputStream()));
+        
+		out = new PrintWriter(
+                new BufferedWriter(
+                new OutputStreamWriter(
+                socket.getOutputStream())));
 	}
 	
 	//thread start: server client connection
 	public void run(){
 		System.out.println("Starting thread for " + p.getName());
 		try{
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                socket.getInputStream()));
         
-		PrintWriter out = new PrintWriter(
-                new BufferedWriter(
-                new OutputStreamWriter(
-                socket.getOutputStream())));
-        
-        while(!socket.isInputShutdown()){
+        while(!out.checkError()){
         	String msg = in.readLine();
         	if(msg == null){
         		break;
@@ -51,8 +55,7 @@ public class ServerConnection extends Thread{
 	        Request req = gson.fromJson(sb.toString(),Request.class);
 	        
 	        Response resp = new Response();
-	        resp.message = "server received action:" + req.action;
-	        resp.message += "\nargs:" + req.args.toString();
+	        resp.build(req);
 			
 	        String json = gson.toJson(resp);
 	        out.println("RESPONSE");
