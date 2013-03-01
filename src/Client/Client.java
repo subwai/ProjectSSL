@@ -1,6 +1,7 @@
 package Client;
 
 import java.io.*;
+import java.net.ConnectException;
 
 import javax.net.ssl.*;
 
@@ -10,17 +11,30 @@ import java.security.KeyStore;
 
 
 public class Client {
+	private SSLSocket socket;
+	
 	public static void main(String[] args) throws IOException{
+		new Client();
+				
+	}
+	
+	public Client() throws IOException{
+		run();
+	}
+	
+	private void run() throws IOException{
 		String host = "localhost";
 		int port = 1337;
 		String path = "";
 		Scanner scan = new Scanner(System.in);
 		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
+		System.setProperty("javax.net.ssl.trustStorePassword", "qweqwe");
+		
+		System.out.println("Enter username (e.g socialstyrelsen):");
+		String user = scan.next();
 		System.out.println("Enter password:");
-//		String pass = new String(readPassword()); // read pw without echo! replaces scanner, must be run from console.
- 		String pass = scan.next();
-		System.setProperty("javax.net.ssl.trustStorePassword", pass);
+		String pass = scan.next();
 		
 		SSLSocketFactory factory = null;
 		
@@ -33,8 +47,13 @@ public class Client {
             ctx = SSLContext.getInstance("TLS");
             kmf = KeyManagerFactory.getInstance("SunX509");
             ks = KeyStore.getInstance("JKS");
-
-            ks.load(new FileInputStream("keys/socialstyrelsen.jks"), passphrase);
+            
+            try{
+            	ks.load(new FileInputStream("keys/"+user+".jks"), passphrase);
+            }catch(IOException ex){
+            	System.out.println("Invalid user credentials. Exiting");
+            	return;
+            }
 
             kmf.init(ks, passphrase);
             ctx.init(kmf.getKeyManagers(), null, null);
@@ -43,33 +62,35 @@ public class Client {
         } catch (Exception e) {
             throw new IOException(e.getMessage());
         }
-		System.out.println("bajs1");
 
+        try{
+        	socket = (SSLSocket)factory.createSocket(host, port);
+        }catch(ConnectException ex){
+        	System.out.println("Could not connect to server. Reason: " + ex.getMessage());
+        	return;
+        }
         
-		SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
 		socket.setNeedClientAuth(true);
 		
-		printSocketInfo(socket);
-		System.out.println("bajs2");
+		//printSocketInfo(socket);
 
 		socket.startHandshake();
-		System.out.println("bajs3");
+		System.out.println("Connected to server");
 
 		String list = "list";
 		String create = "create";
 		String delete = "delete";
+		String exit = "exit";
 		boolean input = true;
 		while(input){
-			System.out.println("Inläsning börjar!");
+			System.out.println("Possible commands: list, create, delete, exit.");
 			String command = scan.next();
 			if(command.equals(list)){
 				String patient = scan.next();
 				if(patient.equalsIgnoreCase("all")){
-					System.out.println("Listar alla");
-					//TODO metodanrop server!
+					System.out.println("TODO: command List all");
 				}else{
-					System.out.println("Lista alla med patient " + patient);
-					//TODO metodanrop server!
+					System.out.println("TODO: List all with patient: " + patient);
 				}
 			}else if(command.equals(create)){
 				String patient = scan.next();
@@ -82,14 +103,14 @@ public class Client {
 				//TODO metodanrop server! glöm ej kolla access doctor.
 			}else if(command.equals(delete)){
 				String record = scan.next();
-				System.out.println("Tar bort journal: " + record);
-				//TODO metodanrop server glöm ej kolla access admin!
+				System.out.println("TODO: Remove record: " + record);
 
-			}else{
-				System.out.println("Inget lästes");
+			}else if(command.equals(exit)){
+				break;
 			}
-			
-			
+			else{
+				System.out.println("Error: Unknown command");
+			}
 		}
 		
 		PrintWriter out = new PrintWriter(
@@ -121,8 +142,8 @@ public class Client {
         in.close();
         out.close();
         socket.close();
-		
 	}
+
 	private static void printSocketInfo(SSLSocket s) {
 	      System.out.println("Socket class: "+s.getClass());
 	      System.out.println("   Remote address = "
