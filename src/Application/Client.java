@@ -97,7 +97,8 @@ public class Client {
 		System.out.println("Connected");
 		String help = "Possible commands:" + "%n\tlist patient|all"
 				+ "%n\tcreate patient doctor nurse division data"
-				+ "%n\tdelete record" + "%n\thelp" + "%n\texit";
+				+ "%n\tdelete record" + "%n\thelp" + "%n\texit"
+				+ "%n\tshow recordID";
 
 		try {
 			System.out.printf(help);
@@ -126,7 +127,10 @@ public class Client {
 					String record = scan.next();
 					req.action = "delete";
 					req.args.add(record);
-
+				} else if (command.equals("show")){
+					String ID = scan.next();
+					req.action = "show";
+					req.args.add(ID);
 				} else if (command.equals("help")) {
 					System.out.printf(help);
 				} else if (command.equals("exit")) {
