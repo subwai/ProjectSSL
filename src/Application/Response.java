@@ -13,7 +13,6 @@ public class Response {
 	// associated logic) which is returned to the client.
 	public void build(Request req, Person user, Database db, Logger logger) {
 
-		// TODO: insert function calls in each if case:
 		// I would recommend extracting the logic from Server into a db class or
 		// something
 
