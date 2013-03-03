@@ -105,14 +105,16 @@ public class Server {
 					Thread clientThread = new Thread(sc);
 					clientThread.setName("hc:" + user.getName());
 					clientThread.start();
-
+					logger.info(user.getName() + " have been authenticated.");
 				} else {
 					System.out.println("ERROR: Unknown user. ");
 					socket.close();
+					logger.info("Login attempted and failed with username: " + username);
 				}
 			} catch (Exception ex) {
 				System.err.println("ERROR accepting socket connection");
 				ex.printStackTrace();
+				logger.info("Authentication attempt error: Accepting socket connection failed.");
 				if (socket != null) {
 					socket.close();
 				}
