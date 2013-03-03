@@ -4,6 +4,7 @@ bin/
 *.glo
 *.idx
 *.log
+*.lck
 *.toc
 *.ist
 *.acn
