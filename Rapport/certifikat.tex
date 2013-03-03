@@ -1,7 +1,7 @@
 \section{Certifikat}
 Ett certifikat är ett elektroniskt dokument som som änvänds för att kunna bekräfta någons identitet på nätet. Certifikatet har en publik nyckel (publik) som man binder till en användares namn, address m.m. 
 Utöver detta finns det information om utfärdaren av certifikatet. 
-För att kunna använda certifikat behövs det ett "överhuvud" som alla ska kunna lita på. 
+För att kunna använda certifikat behövs det ett överhuvud som alla ska kunna lita på. 
 Dessa överhuvuden är CAs, Certificate Authorities. 
 
 En CA utfärdar certifikat som andra kan använda för att visa att de är pålitliga på nätet. För att två parter ska kunna lita på varandra måste använda sig av certifikat som är utfärdade av samma CA. Idag finns det enstaka stora organ som tillhandahåller certifikat till nästan alla olika tjänster, dessa är VeriSign Inc och Comodo  [ referens wiki: \url{http://en.wikipedia.org/wiki/Certificate_authority} ]
@@ -10,15 +10,11 @@ För att kunna ge ett bra exempel på detta så tänker vi oss en webbläsare so
 
 \subsection{Autentisering}
 För att en användare ska kunna ansluta sig till en hemsida måste de autentisera sig, det vill säga kontrollera om hemsidan har ett utfärdat och giltigt certifikat. Hemsidan kommer då skicka sin publika nyckel till användaren som i sin tur skickar en förfrågan till CA:n och frågar om denna nyckel tillhör sidan som skickade den. Skulle den göra det så kommer en uppkoppling ske och informationsbyte blir möjlig.
-Det händer också att "falska" sidor tar denna nyckeln och påstår att denna är deras. För att undkomma detta problem krypteras informationen som kräver den rätta privata nyckeln för att dekryptera informationen.
-För att kunna skapa och hantera certifikaten rätt har man tagit fram standarder för detta. En standard som används väldigt väl och som vi använt till vårt projekt är X.509.
-
-\subsection{Autentisering - Projekt}
-
-//TODO Skriva om hur vi autentiserar oss på projektet!!!!!!!!!!                                           
+Det händer också att falska sidor tar denna nyckeln och påstår att denna är deras. För att undkomma detta problem krypteras informationen som kräver den rätta privata nyckeln för att dekryptera informationen.
+För att kunna skapa och hantera certifikaten rätt har man tagit fram standarder för detta. En standard som används väldigt väl och som vi använt till vårt projekt är X.509.                                         
 
 \subsection{SSL Certifikat}
-Eftersom vi använder oss av SSL i vår nätverksanslutning mellan klient och server så kommer det finnas inbakade SSL certifikat som SSL kommer använda vid 'handshake' fasen. Det som händer då är att SSL certifikatet innehar krypteringsnycklarna som ska säkra uppkopplingen, som respektive nod skickar till sin uppkopplingsnod [referens: \url{http://msdn.microsoft.com/en-us/library/windows/desktop/aa364691%28v=vs.85%29.aspx}. På så sätt delar de krypteringsnycklar i en 'handshake' mellan varanda. Värt att notera är att servern skickar sitt certifikat till klienten men att klienten ska skicka sitt för att autentisera sig är frivilligt.
+Eftersom vi använder oss av SSL i vår nätverksanslutning mellan klient och server så kommer det finnas inbakade SSL certifikat som SSL kommer använda vid handshake fasen. Det som händer då är att SSL certifikatet innehar krypteringsnycklarna som ska säkra uppkopplingen, som respektive nod skickar till sin uppkopplingsnod [referens: \url{http://msdn.microsoft.com/en-us/library/windows/desktop/aa364691%28v=vs.85%29.aspx}. På så sätt delar de krypteringsnycklar i en handshake mellan varanda. Värt att notera är att servern skickar sitt certifikat till klienten men att klienten ska skicka sitt för att autentisera sig är frivilligt.
 
 \subsection{Certifikat - Projekt}
 För att vårt projekt ska fungera måste vi skapa egna certifikat för att kunna autentisera klienterna och på så sätt skapa en två faktor autentisering. 
