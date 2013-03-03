@@ -59,7 +59,7 @@ public class Database {
 		});
 	}
 
-	public int createRecord(String patient, String doctor, String nurse,
+	public int createRecord(Person user, String patient, String doctor, String nurse,
 			String division, String data) {
 		Patient p = null;
 		Doctor d = null;
@@ -86,17 +86,29 @@ public class Database {
 			}
 		}
 		
+		// -1 = wrong input. -2 = No access to create.
 		if (d == null)
 			return -1;
 		if (n == null)
 			return -1;
 		if (div == null)
 			return -1;
-		
+		if(d != user)
+			return -2; 
 		int id = records.size() + 1;
 		Record record = new Record(id, p, d, n, div, data);
 		records.add(record);
 		return id;
+	}
+	
+	public String getData(int ID){
+		String data = null;
+		for(Record r: records){
+			if(r.getID() == ID){
+				data = r.getData();
+			}
+		}
+		return data;
 	}
 
 	public boolean deleteRecord(int ID) {

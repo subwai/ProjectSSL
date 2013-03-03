@@ -42,7 +42,7 @@ public class Response {
 			String nurse = args.get(2);
 			String division = args.get(3);
 			String data = args.get(4);
-			int ID = db.createRecord(patient, doctor, nurse, division, data);
+			int ID = db.createRecord(user,patient, doctor, nurse, division, data);
 			if (ID > 0) {
 				sb.append("Record created successfully with id: " + ID + "%n");
 				sb.append("And data %n");
@@ -63,6 +63,13 @@ public class Response {
 
 		} else if (action.equals("heartbeat")) {
 			sb.append("");
+		}else if (action.equals("show")){
+			int ID = Integer.parseInt(args.get(0));
+			String data = db.getData(ID);
+			if(data==null){
+				data = "No record with that ID";
+			}
+			sb.append(data);
 		}
 		message = sb.toString();
 	}
