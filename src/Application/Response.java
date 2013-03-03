@@ -26,9 +26,11 @@ public class Response {
 			if (patient.equals("all")) {
 				sb.append("List of all your available records:%n");
 				records = db.listRecords(user);
+				logger.info(user.getName() + " listed all availible records");
 			} else {
 				sb.append("List of all your available records for " + patient + ":%n");
 				records = db.searchRecords(user, patient);
+				logger.info(user.getName() + " listed all availible records for patient: " + patient);
 			}
 
 			sb.append("------------------------------------------------------------------- ");
@@ -48,8 +50,13 @@ public class Response {
 				sb.append("And data %n");
 				sb.append("------------------------------------------------------------------- %n");
 				sb.append(data);
-			} else {
+				logger.info(user.getName() + " created record with id: " + ID);
+			} else if(ID==-1) {
 				sb.append("Error: Could not create record, invalid input.");
+				logger.info(user.getName() + " failed to create record. Reason: invalid input.");
+			}else{
+				sb.append("Error: Could not create record, no access.");
+				logger.info(user.getName() + " failed to create record. Reason: insufficient access.");
 			}
 		} else if (action.equals("delete")) {
 			String record = req.args.get(0);
@@ -57,8 +64,10 @@ public class Response {
 				int rid = Integer.parseInt(record);
 				db.deleteRecord(rid);
 				sb.append("Record with ID: " + rid + " successfully deleted.");
+				logger.info(user.getName() + " deleted record with id: " + rid);
 			} catch(NumberFormatException e) {
 				sb.append("Error: Could not delete record, invalid input.");
+				logger.info(user.getName() + " failed to delete record. Reason: invalid input.");
 			}
 
 		} else if (action.equals("heartbeat")) {
