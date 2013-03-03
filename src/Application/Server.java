@@ -8,6 +8,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Scanner;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -29,7 +30,6 @@ public class Server {
 			NoSuchAlgorithmException, KeyStoreException, CertificateException,
 			UnrecoverableKeyException, KeyManagementException,
 			InvalidNameException {
-		int port = 1337;
 
 		Logger logger = Logger.getLogger("src/ServerLog");
 		FileHandler fh;
@@ -55,44 +55,31 @@ public class Server {
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 
-		SSLServerSocketFactory factory = null;
-
 		SSLContext ctx;
 		KeyManagerFactory kmf;
 		KeyStore ks;
-		char[] passphrase = "qweqwe".toCharArray();
+		System.out.println("Please enter the password for user/key '"+Shared.SERVER_KEY+"'");
+		Scanner scan = new Scanner(System.in);
+		char[] passphrase = Shared.readPassword(scan);
 
 		ctx = SSLContext.getInstance("TLS");
 		kmf = KeyManagerFactory.getInstance("SunX509");
 		ks = KeyStore.getInstance("JKS");
 
-		ks.load(new FileInputStream("keys/server.jks"), passphrase);
+		ks.load(new FileInputStream("keys/"+Shared.SERVER_KEY+".jks"), null);
 
 		kmf.init(ks, passphrase);
 		ctx.init(kmf.getKeyManagers(), null, null);
-		factory = ctx.getServerSocketFactory();
+		SSLServerSocketFactory factory =  ctx.getServerSocketFactory();
 
-		SSLServerSocket s = (SSLServerSocket) factory.createServerSocket(port);
-		System.out.println("Server started and accepting connections on port "
-				+ port);
-		printServerSocketInfo(s);
+		SSLServerSocket s = (SSLServerSocket) factory.createServerSocket(Shared.SERVER_PORT);
+		System.out.println("Server started and accepting connections on port "+ Shared.SERVER_PORT);
 		SSLSocket socket = null;
 		while (true) {
 			try {
 				socket = (SSLSocket) s.accept();
 				socket.setNeedClientAuth(true);
-				printSocketInfo(socket);
-				SSLSession session = socket.getSession();
-				X509Certificate cert = session.getPeerCertificateChain()[0];
-				// extract CN from DN
-				LdapName ldapDN = new LdapName(cert.getSubjectDN().getName());
-				String username = "";
-				for (Rdn rdn : ldapDN.getRdns()) {
-					if (rdn.getType().trim().toUpperCase().equals("CN")) {
-						username = rdn.getValue().toString().trim()
-								.toLowerCase();
-					}
-				}
+				String username = Shared.commonNameFrom(socket);
 
 				socket.setKeepAlive(true);
 				Person user;
@@ -120,34 +107,5 @@ public class Server {
 				}
 			}
 		}
-	}
-
-	private static void printSocketInfo(SSLSocket s) {
-		System.out.println("Socket class: " + s.getClass());
-		System.out.println("   Remote address = "
-				+ s.getInetAddress().toString());
-		System.out.println("   Remote port = " + s.getPort());
-		System.out.println("   Local socket address = "
-				+ s.getLocalSocketAddress().toString());
-		System.out.println("   Local address = "
-				+ s.getLocalAddress().toString());
-		System.out.println("   Local port = " + s.getLocalPort());
-		System.out.println("   Need client authentication = "
-				+ s.getNeedClientAuth());
-		SSLSession ss = s.getSession();
-		System.out.println("   Cipher suite = " + ss.getCipherSuite());
-		System.out.println("   Protocol = " + ss.getProtocol());
-	}
-
-	private static void printServerSocketInfo(SSLServerSocket s) {
-		System.out.println("Server socket class: " + s.getClass());
-		System.out.println("   Socker address = "
-				+ s.getInetAddress().toString());
-		System.out.println("   Socker port = " + s.getLocalPort());
-		System.out.println("   Need client authentication = "
-				+ s.getNeedClientAuth());
-		System.out.println("   Want client authentication = "
-				+ s.getWantClientAuth());
-		System.out.println("   Use client mode = " + s.getUseClientMode());
 	}
 }

@@ -10,13 +10,16 @@ import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.security.KeyStore;
+import java.security.UnrecoverableKeyException;
 import java.util.Scanner;
 
+import javax.naming.InvalidNameException;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.security.cert.X509Certificate;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -36,15 +39,14 @@ public class Client {
 
 	private void run() throws IOException {
 		String host = "localhost";
-		int port = 1337;
 		Scanner scan = new Scanner(System.in);
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 
-		System.out.println("Enter username (e.g socialstyrelsen):");
+		System.out.println("Enter user/key (e.g socialstyrelsen):");
 		String user = scan.next();
 		System.out.println("Enter password:");
-		char[] passphrase = readPassword(scan);
+		char[] passphrase = Shared.readPassword(scan);
 
 		SSLSocketFactory factory = null;
 
@@ -58,10 +60,9 @@ public class Client {
 			ks = KeyStore.getInstance("JKS");
 
 			try {
-				ks.load(new FileInputStream("keys/" + user + ".jks"),
-						passphrase);
-			} catch (IOException ex) {
-				System.out.println("Invalid user credentials. Exiting");
+				ks.load(new FileInputStream("keys/" + user + ".jks"),null);
+			} catch (IOException ex) {	
+				System.err.println("Invalid username/key provided. Exiting");
 				return;
 			}
 
@@ -69,12 +70,17 @@ public class Client {
 			ctx.init(kmf.getKeyManagers(), null, null);
 
 			factory = ctx.getSocketFactory();
-		} catch (Exception e) {
+		} catch(UnrecoverableKeyException ex){
+			System.err.println("Invalid password provided. Exiting");
+			return;
+		}
+		catch (Exception e) {
+			System.out.println(e.getClass());
 			throw new IOException(e.getMessage());
 		}
 
 		try {
-			socket = (SSLSocket) factory.createSocket(host, port);
+			socket = (SSLSocket) factory.createSocket(host, Shared.SERVER_PORT);
 		} catch (ConnectException ex) {
 			System.out.println("Could not connect to server. Reason: "
 					+ ex.getMessage());
@@ -83,10 +89,17 @@ public class Client {
 
 		socket.setNeedClientAuth(true);
 
-		// printSocketInfo(socket);
 
 		System.out.print("Connecting to server..  ");
 		socket.startHandshake();
+		
+		String username = Shared.commonNameFrom(socket);
+		
+		if(!username.equals(Shared.SERVER_KEY)){
+			System.err.println("ERROR: Connected to wrong server ("+username+"). Exiting");
+			return;
+		}
+		
 		socket.setKeepAlive(true);
 
 		out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
@@ -187,30 +200,4 @@ public class Client {
 		return response;
 	}
 
-	@SuppressWarnings("unused")
-	private static void printSocketInfo(SSLSocket s) {
-		System.out.println("Socket class: " + s.getClass());
-		System.out.println("   Remote address = "
-				+ s.getInetAddress().toString());
-		System.out.println("   Remote port = " + s.getPort());
-		System.out.println("   Local socket address = "
-				+ s.getLocalSocketAddress().toString());
-		System.out.println("   Local address = "
-				+ s.getLocalAddress().toString());
-		System.out.println("   Local port = " + s.getLocalPort());
-		System.out.println("   Need client authentication = "
-				+ s.getNeedClientAuth());
-		SSLSession ss = s.getSession();
-		System.out.println("   Cipher suite = " + ss.getCipherSuite());
-		System.out.println("   Protocol = " + ss.getProtocol());
-	}
-
-	private char[] readPassword(Scanner scan) throws IOException {
-		if (System.console() != null) {
-			return System.console().readPassword();
-		} else {
-			return scan.next().toCharArray();
-		}
-
-	}
 }
