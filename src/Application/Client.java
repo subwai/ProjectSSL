@@ -13,13 +13,10 @@ import java.security.KeyStore;
 import java.security.UnrecoverableKeyException;
 import java.util.Scanner;
 
-import javax.naming.InvalidNameException;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
-import javax.security.cert.X509Certificate;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;

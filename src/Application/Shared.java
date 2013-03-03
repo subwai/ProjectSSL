@@ -47,6 +47,7 @@ public class Shared {
 		return username;
 	}
 	
+	@SuppressWarnings("unused")
 	private static void printSocketInfo(SSLSocket s) {
         System.out.println("Socket class: " + s.getClass());
         System.out.println("   Remote address = "
@@ -63,6 +64,7 @@ public class Shared {
         System.out.println("   Cipher suite = " + ss.getCipherSuite());
         System.out.println("   Protocol = " + ss.getProtocol());
 	}
+	@SuppressWarnings("unused")
 	private static void printServerSocketInfo(SSLServerSocket s) {
         System.out.println("Server socket class: " + s.getClass());
         System.out.println("   Socker address = "
