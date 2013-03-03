@@ -20,10 +20,10 @@ public class ServerConnection implements Runnable {
 	private PrintWriter out;
 	private Database db;
 	private Logger logger;
-	private DatabaseStorage dbs;
+	private ObjectStorage dbs;
 
 	public ServerConnection(Socket socket, Person user, Database db,
-			Logger logger, DatabaseStorage dbs) throws IOException {
+			Logger logger, ObjectStorage dbs) throws IOException {
 		this.logger = logger;
 		this.db = db;
 		this.dbs = dbs;
@@ -39,7 +39,6 @@ public class ServerConnection implements Runnable {
 
 	// thread start: server client connection
 	public void run() {
-		System.out.println("Starting thread for " + user.getName());
 		try {
 			while (!out.checkError()) {
 				String msg = in.readLine();
@@ -68,14 +67,16 @@ public class ServerConnection implements Runnable {
 				out.println(json);
 				out.flush();
 			}
-
-			System.err.println("Closing connection with " + user.getName());
 			socket.close();
 
 		} catch (IOException e) {
 			System.err.println("Socket error in thread");
+			try {
+				socket.close();
+			} catch (IOException e1) {}
 			e.printStackTrace();
 		}
+		logger.info("Closing connection with " + user.getName());
 	}
 
 }

@@ -10,9 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Scanner;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.naming.InvalidNameException;
@@ -24,30 +22,12 @@ import javax.net.ssl.SSLSocket;
 
 public class Server {
 	static final String LOG_PATH = "server.log";
+	static final String SALT = "A6GXcTrb9wOW2jb1ILkESY15";
+	
 	public static void main(String[] args) throws IOException,
 			NoSuchAlgorithmException, KeyStoreException, CertificateException,
 			UnrecoverableKeyException, KeyManagementException,
 			InvalidNameException, InvalidKeyException, NoSuchPaddingException {
-
-		Logger logger = Logger.getLogger("ServerLogger");
-		FileHandler fh;
-		int limit = 5000000;
-		try {
-			// This block configure the logger with handler and formatter
-			fh = new FileHandler(LOG_PATH, limit, 1, true);
-			logger.addHandler(fh);
-			// logger.setLevel(Level.ALL);
-			SimpleFormatter formatter = new SimpleFormatter();
-			fh.setFormatter(formatter);
-
-			// the following statement is used to log any messages
-			logger.info("Server started.");
-
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 		   @Override
@@ -58,13 +38,36 @@ public class Server {
 		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 
-		SSLContext ctx;
-		KeyManagerFactory kmf;
-		KeyStore ks;
+
 		System.out.println("Please enter the password for user/key '"+Shared.SERVER_KEY+"'");
 		Scanner scan = new Scanner(System.in);
 		String passphrase = Shared.readPassword(scan);
+		
+		
+		//setup logging
+		ObjectStorage logStorage = new ObjectStorage("log.jsd",passphrase,SALT);
+		Object dlho = logStorage.load();
+		ListLogHandler dlh;
+		if(dlho == null){
+			dlh = new ListLogHandler(logStorage);
+		}else{
+			dlh = (ListLogHandler)dlho;
+			dlh.registerInstance(logStorage);
+		}
+		
+		Logger logger = Logger.getLogger("ServerLogger");
+		logger.addHandler(dlh);
+		logger.info("Server started.");
+		
+		Thread loggerThread = new Thread(dlh);
+		loggerThread.setName("hc-logger");
+		loggerThread.start();
 
+		
+		SSLContext ctx;
+		KeyManagerFactory kmf;
+		KeyStore ks;
+		
 		ctx = SSLContext.getInstance("TLS");
 		kmf = KeyManagerFactory.getInstance("SunX509");
 		ks = KeyStore.getInstance("JKS");
@@ -74,9 +77,16 @@ public class Server {
 		ctx.init(kmf.getKeyManagers(), null, null);
 		SSLServerSocketFactory factory =  ctx.getServerSocketFactory();
 		
-		String salt = "A6GXcTrb9wOW2jb1ILkESY15";
-		DatabaseStorage dbs = new DatabaseStorage(passphrase,salt);
-		Database db = dbs.load();
+		ObjectStorage dbs = new ObjectStorage("database.jsd",passphrase,SALT);
+		Object dbo = dbs.load();
+		Database db;
+		if(dbo == null){
+			db = new Database();
+		}else{
+			db = (Database)dbo;
+		}
+		
+		
 
 		SSLServerSocket s = (SSLServerSocket) factory.createServerSocket(Shared.SERVER_PORT);
 		System.out.println("Server started and accepting connections on port "+ Shared.SERVER_PORT);
@@ -100,12 +110,10 @@ public class Server {
 					clientThread.start();
 					logger.info(user.getName() + " have been authenticated.");
 				} else {
-					System.out.println("ERROR: Unknown user. ");
 					socket.close();
 					logger.info("Login attempted and failed with username: " + username);
 				}
 			} catch (Exception ex) {
-				System.err.println("ERROR accepting socket connection");
 				ex.printStackTrace();
 				logger.info("Authentication attempt error: Accepting socket connection failed.");
 				if (socket != null) {
