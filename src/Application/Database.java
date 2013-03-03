@@ -100,7 +100,7 @@ public class Database implements Serializable{
 			return -1;
 		if (div == null)
 			return -1;
-		if(d != user && !(user instanceof Admin))
+		if(d != user)
 			return -2; 
 		int id = records.size() + 1;
 		Record record = new Record(id, p, d, n, div, data);

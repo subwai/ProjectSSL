@@ -14,7 +14,7 @@ public class Admin extends Person {
 
 	@Override
 	public boolean hasWriteAccess(Record r) {
-		return true;
+		return false;
 	}
 
 	@Override
