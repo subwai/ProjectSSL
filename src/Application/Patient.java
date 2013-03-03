@@ -1,6 +1,7 @@
 package Application;
 
 public class Patient extends Person{
+	private static final long serialVersionUID = 908405158418824107L;
 	public static int access = 1;
 	
 	public Patient (String name){

@@ -1,6 +1,9 @@
 package Application;
 
-public abstract class Person {
+import java.io.Serializable;
+
+public abstract class Person implements Serializable{
+	private static final long serialVersionUID = -5403624499257604725L;
 	protected String name;
 
 	public Person(String name) {

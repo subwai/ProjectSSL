@@ -20,11 +20,13 @@ public class ServerConnection implements Runnable {
 	private PrintWriter out;
 	private Database db;
 	private Logger logger;
+	private DatabaseStorage dbs;
 
 	public ServerConnection(Socket socket, Person user, Database db,
-			Logger logger) throws IOException {
+			Logger logger, DatabaseStorage dbs) throws IOException {
 		this.logger = logger;
 		this.db = db;
+		this.dbs = dbs;
 		this.socket = socket;
 		this.user = user;
 		this.gson = new Gson();
@@ -53,9 +55,12 @@ public class ServerConnection implements Runnable {
 					sb.append(in.readLine());
 				}
 				Request req = gson.fromJson(sb.toString(), Request.class);
-
+				
 				Response resp = new Response();
-				resp.build(req, user, db, logger);
+				synchronized(db){//build one response at a time
+					resp.build(req, user, db, logger);
+					dbs.save(db);
+				}
 
 				String json = gson.toJson(resp);
 				out.println("RESPONSE");

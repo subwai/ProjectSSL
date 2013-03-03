@@ -1,14 +1,21 @@
 package Application;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Database {
-	private static ArrayList<Record> records;
-	private static ArrayList<Person> users;
-	private static ArrayList<Division> divisions;
+public class Database implements Serializable{
+
+	private static final long serialVersionUID = 299569853749729381L;
+	
+	
+	private ArrayList<Record> records;
+	private ArrayList<Person> users;
+	private ArrayList<Division> divisions;
+	
 
 	public Database() {
+		
 		records = new ArrayList<Record>();
 		users = new ArrayList<Person>();
 		divisions = new ArrayList<Division>();
@@ -86,14 +93,14 @@ public class Database {
 			}
 		}
 		
-		// -1 = wrong input. -2 = No access to create.
+		// -1 = wrong input. -2 = No access to create. //TODO: why not use OO? user.hasWriteAccess(record)
 		if (d == null)
 			return -1;
 		if (n == null)
 			return -1;
 		if (div == null)
 			return -1;
-		if(d != user)
+		if(d != user && !(user instanceof Admin))
 			return -2; 
 		int id = records.size() + 1;
 		Record record = new Record(id, p, d, n, div, data);
@@ -121,7 +128,7 @@ public class Database {
 		return false;
 	}
 
-	protected static <T> ArrayList<T> filter(ArrayList<T> target,
+	protected <T> ArrayList<T> filter(ArrayList<T> target,
 			Predicate<T> predicate) {
 		ArrayList<T> result = new ArrayList<T>();
 		for (T element : target) {

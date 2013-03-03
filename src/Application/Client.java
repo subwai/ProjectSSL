@@ -43,7 +43,7 @@ public class Client {
 		System.out.println("Enter user/key (e.g socialstyrelsen):");
 		String user = scan.next();
 		System.out.println("Enter password:");
-		char[] passphrase = Shared.readPassword(scan);
+		char[] passphrase = Shared.readPassword(scan).toCharArray();
 
 		SSLSocketFactory factory = null;
 

@@ -1,6 +1,9 @@
 package Application;
 
-public class Record {
+import java.io.Serializable;
+
+public class Record implements Serializable{
+	private static final long serialVersionUID = -284571681094969658L;
 	private int ID;
 	private Patient patient;
 	private Doctor doctor;

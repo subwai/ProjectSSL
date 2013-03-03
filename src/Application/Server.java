@@ -2,6 +2,7 @@ package Application;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -13,6 +14,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import javax.crypto.NoSuchPaddingException;
 import javax.naming.InvalidNameException;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -21,34 +23,39 @@ import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 
 public class Server {
-
+	static final String LOG_PATH = "server.log";
 	public static void main(String[] args) throws IOException,
 			NoSuchAlgorithmException, KeyStoreException, CertificateException,
 			UnrecoverableKeyException, KeyManagementException,
-			InvalidNameException {
+			InvalidNameException, InvalidKeyException, NoSuchPaddingException {
 
-		Logger logger = Logger.getLogger("src/ServerLog");
+		Logger logger = Logger.getLogger("ServerLogger");
 		FileHandler fh;
 		int limit = 5000000;
 		try {
 			// This block configure the logger with handler and formatter
-			fh = new FileHandler("src/ServerLog.log", limit, 1, true);
+			fh = new FileHandler(LOG_PATH, limit, 1, true);
 			logger.addHandler(fh);
 			// logger.setLevel(Level.ALL);
 			SimpleFormatter formatter = new SimpleFormatter();
 			fh.setFormatter(formatter);
 
 			// the following statement is used to log any messages
-			logger.info("Server log initiated.");
+			logger.info("Server started.");
 
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		Database db = new Database();
-
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		   @Override
+		   public void run() {
+		    System.out.println("Shutting down...");
+		   }
+		});
+		
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
 
 		SSLContext ctx;
@@ -56,17 +63,20 @@ public class Server {
 		KeyStore ks;
 		System.out.println("Please enter the password for user/key '"+Shared.SERVER_KEY+"'");
 		Scanner scan = new Scanner(System.in);
-		char[] passphrase = Shared.readPassword(scan);
+		String passphrase = Shared.readPassword(scan);
 
 		ctx = SSLContext.getInstance("TLS");
 		kmf = KeyManagerFactory.getInstance("SunX509");
 		ks = KeyStore.getInstance("JKS");
 
 		ks.load(new FileInputStream("keys/"+Shared.SERVER_KEY+".jks"), null);
-
-		kmf.init(ks, passphrase);
+		kmf.init(ks, passphrase.toCharArray());
 		ctx.init(kmf.getKeyManagers(), null, null);
 		SSLServerSocketFactory factory =  ctx.getServerSocketFactory();
+		
+		String salt = "A6GXcTrb9wOW2jb1ILkESY15";
+		DatabaseStorage dbs = new DatabaseStorage(passphrase,salt);
+		Database db = dbs.load();
 
 		SSLServerSocket s = (SSLServerSocket) factory.createServerSocket(Shared.SERVER_PORT);
 		System.out.println("Server started and accepting connections on port "+ Shared.SERVER_PORT);
@@ -84,7 +94,7 @@ public class Server {
 							+ user.getClass().getSimpleName());
 					// start separate thread
 					ServerConnection sc = new ServerConnection(socket, user,
-							db, logger);
+							db, logger, dbs);
 					Thread clientThread = new Thread(sc);
 					clientThread.setName("hc:" + user.getName());
 					clientThread.start();

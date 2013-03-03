@@ -26,3 +26,4 @@ bin/
 *.synctex.gz
 *.DS_Store
 *.pdf
+*.jsd

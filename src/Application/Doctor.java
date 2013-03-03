@@ -1,6 +1,7 @@
 package Application;
 
 public class Doctor extends Person {
+	private static final long serialVersionUID = -5056242144713848328L;
 	private Division division;
 	
 	public Doctor(String name, Division division) {

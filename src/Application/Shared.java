@@ -15,11 +15,12 @@ import javax.security.cert.X509Certificate;
 public class Shared {
 	static final String SERVER_KEY = "server";
 	static final int SERVER_PORT = 1337;
-	protected static char[] readPassword(Scanner scan) throws IOException {
+	
+	protected static String readPassword(Scanner scan) throws IOException {
 		if (System.console() != null) {
-			return System.console().readPassword();
+			return String.valueOf(System.console().readPassword());
 		} else {
-			return scan.next().toCharArray();
+			return scan.next();
 		}
 
 	}
