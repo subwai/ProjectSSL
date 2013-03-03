@@ -23,3 +23,44 @@ De attacker som vi ska analysera är:
 \end{itemize}
 
 \subsection{Eavesdropping}
+Någon som tjuvlyssnar på länken där information skickas kallas för eavesdropper. Eavesdroppern är en passiv hackare vilket betyder att han inte gör något på länken förutom att lyssna. Just på grund av att hackaren inte gör något är det väldigt svårt att upptäcka sådana attacker. När de lyssnar på länken är de ute endast efter innehållet samt att kunna se något mönster när information skickas fram och tillbaka.
+
+Eftersom vi ska skicka sjukjournaler över nätet är det viktigt att ingen kan lyssna på vad som skickas och på så sätt få ut specifik information. Det är därför vi använder oss av en SSL anslutning som krypterar datan samt kräver att parterna autentiserar sig. Detta gör att vi kan eliminera obehöriga från att lyssna på länken. 
+
+\subsection{Man In The Middle}
+
+För att en attack ska kallas för man-in-the-middle attack (MITM) så ska hackaren lägga sig mellan klient och server. När hackaren lyckats lägga sig mellan noderna och fått en etablerad anslutning mellan sig och server samt mellan sig och klient kan hackaren tjuvlyssna på länken och göra förändringar i systemet. Detta är med andra ord en aktiv hackare, till skillnad från den passiva hackaren i eavesdropping. Det som händer är att klienten kommer vara övertygad om att MITM är servern och servern kommer tro att MITM är en legitim användare. Om klienten vill skicka data till servern kommer detta först gå till MITM som sedan vidarebefodrar det till servern och sedan om servern svarar på detta kommer MITM vidarebefodra detta till klienten. Det är just så här hackaren kan ändra, kopiera och skicka datan till andra noder [\url{http://en.wikipedia.org/wiki/Man-in-the-middle_attack}].
+
+Det är oftast kryptosystem som blir drabbade av MITM, speciellt de kryptosystem som använder publika nycklar. För att illustrera händelseförloppet använder vi oss av tre personer där Alice är klienten, Magnus är MITM och Bob är servern. När Alice vill skapa en anslutning kommer hon söka efter Bobs publika nyckel. Denna får hon genom att skicka en request efter den. Men eftersom Magnus är en MITM och får all data först kommer han att vidarebefodra meddelandet till Bob som sedan skickar sin publika nyckel till Magnus. Magnus kommer sedan att skicka sin nyckel till Alice som tror att nyckeln är Bobs. Nu kommer Alice att skicka meddelandet krypterat med Magnus nyckel istället för Bobs. Då kommer Magnus att kunna läsa datan och möjligtvis förändra den för att skapa problem för både Alice och Bob. 
+
+\subsection{Spoofing Attacks}
+
+qweqwe
+
+\subsection{Fishing Attacks}
+
+qweqwe
+
+\subsection{Brute Force Attacks}
+
+qweqwe
+
+\subsection{Dictionary Attacks}
+
+qweqwe
+
+\subsection{Time - Memory - Tradeoff - Attacks}
+
+qweqwe
+
+\subsection{Replay - Attacks}
+
+qweqwe
+
+\subsection{Buffer Overflow}
+
+qweqwe
+
+\subsection{Human Factor}
+
+qweqwe
