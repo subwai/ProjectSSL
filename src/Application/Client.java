@@ -108,7 +108,7 @@ public class Client {
 		String help = "Possible commands:" + "%n\tlist patient|all"
 				+ "%n\tcreate patient doctor nurse division data"
 				+ "%n\tdelete record" + "%n\thelp" + "%n\texit"
-				+ "%n\tshow recordID";
+				+ "%n\tedit recordID newData";
 
 		try {
 			System.out.printf(help);
