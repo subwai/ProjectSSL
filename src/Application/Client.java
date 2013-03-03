@@ -139,8 +139,10 @@ public class Client {
 					req.args.add(record);
 				} else if (command.equals("show")){
 					String ID = scan.next();
-					req.action = "show";
+					String edit = scan.next();
+					req.action = "edit";
 					req.args.add(ID);
+					req.args.add(edit);
 				} else if (command.equals("help")) {
 					System.out.printf(help);
 				} else if (command.equals("exit")) {

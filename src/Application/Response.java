@@ -71,13 +71,16 @@ public class Response {
 
 		} else if (action.equals("heartbeat")) {
 			sb.append("");
-		}else if (action.equals("show")){
+		}else if (action.equals("edit")){
 			int ID = Integer.parseInt(args.get(0));
-			String data = db.getData(ID);
-			if(data==null){
-				data = "No record with that ID";
-			}
-			sb.append(data);
+			String edit = args.get(1);
+			int success = db.editData(user, ID, edit);
+			if(success==1)
+				sb.append("Record: " + ID + " edited successfully.");
+			if(success==0)
+				sb.append("Failed to edit data. Reason: insufficient access.");
+			if(success==-1)
+				sb.append("Failed to edit data. Reason: no record with id: " + ID);
 		}
 		message = sb.toString();
 	}

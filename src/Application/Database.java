@@ -93,7 +93,7 @@ public class Database implements Serializable{
 			}
 		}
 		
-		// -1 = wrong input. -2 = No access to create. //TODO: why not use OO? user.hasWriteAccess(record)
+		// -1 = wrong input. -2 = No access to create.
 		if (d == null)
 			return -1;
 		if (n == null)
@@ -108,14 +108,23 @@ public class Database implements Serializable{
 		return id;
 	}
 	
-	public String getData(int ID){
-		String data = null;
+	public int editData(Person user, int ID, String data){
+		Record rec = null;
 		for(Record r: records){
 			if(r.getID() == ID){
-				data = r.getData();
+				rec = r;
 			}
 		}
-		return data;
+		if(rec!=null){
+			if(user.hasWriteAccess(rec)){
+				rec.editData(data);
+				return 1;
+			}else{
+				return 0; //no access.
+			}
+		}
+		
+		return -1; //no record with ID.
 	}
 
 	public boolean deleteRecord(int ID) {

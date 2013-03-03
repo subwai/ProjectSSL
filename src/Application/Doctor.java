@@ -15,4 +15,15 @@ public class Doctor extends Person {
 		if (r.getDivision() == division) return true;
 		return false;
 	}
+
+	@Override
+	public boolean hasWriteAccess(Record r) {
+		if (r.getDoctor() == this) return true;
+		return false;
+	}
+
+	@Override
+	public boolean hasDeleteAccess(Record r) {
+		return false;
+	}
 }

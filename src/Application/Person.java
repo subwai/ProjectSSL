@@ -15,4 +15,6 @@ public abstract class Person implements Serializable{
 	}
 
 	public abstract boolean hasReadAccess(Record r);
+	public abstract boolean hasWriteAccess(Record r);
+	public abstract boolean hasDeleteAccess(Record r);
 }

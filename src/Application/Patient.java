@@ -14,4 +14,14 @@ public class Patient extends Person{
 		return false;
 	}
 
+	@Override
+	public boolean hasWriteAccess(Record r) {
+		return false;
+	}
+
+	@Override
+	public boolean hasDeleteAccess(Record r) {
+		return false;
+	}
+
 }

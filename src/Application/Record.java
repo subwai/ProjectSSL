@@ -20,6 +20,9 @@ public class Record implements Serializable{
 		this.nurse = nurse;
 		this.division = division;
 	}
+	public void editData(String data){
+		this.data = data;
+	}
 
 	public String getData() {
 		return data;
