@@ -1,5 +1,6 @@
 *.class
 bin/
+.settings/
 *.aux
 *.glo
 *.idx
