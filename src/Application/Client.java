@@ -139,7 +139,7 @@ public class Client {
 					String record = scan.next();
 					req.action = "delete";
 					req.args.add(record);
-				} else if (command.equals("show")){
+				} else if (command.equals("edit")){
 					String ID = scan.next();
 					String edit = scan.next();
 					req.action = "edit";

@@ -32,7 +32,6 @@ public class Shared {
 		try {
 			ldapDN = new LdapName(cert.getSubjectDN().getName());
 		} catch (InvalidNameException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(ldapDN == null){
