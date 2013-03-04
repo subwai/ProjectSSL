@@ -114,7 +114,7 @@ public class Client {
 
 		try {
 			System.out.printf(help);
-
+			
 			while (!out.checkError()) {
 				System.out.printf("%nhc>");
 				String command = scan.next();
@@ -129,7 +129,7 @@ public class Client {
 					String doctor = scan.next();
 					String nurse = scan.next();
 					String division = scan.next();
-					String data = scan.next();
+					String data = scan.nextLine();
 					req.args.add(patient);
 					req.args.add(doctor);
 					req.args.add(nurse);
@@ -141,7 +141,7 @@ public class Client {
 					req.args.add(record);
 				} else if (command.equals("edit")){
 					String ID = scan.next();
-					String edit = scan.next();
+					String edit = scan.nextLine();
 					req.action = "edit";
 					req.args.add(ID);
 					req.args.add(edit);
