@@ -1,6 +1,6 @@
 \section{Bakgrund}
 
-Syftet med vårt projekt är att analysera verkliga situationer som kan uppkomma. I detta fall kommer vi studera hur en server på ett sjukhus håller samtliga journaler för patienterna säkra mot intrång. Dessa journaler ska inte nås av vem som helst utan endast av individer som journalerna har betydelse för. För att inte alla ska kunna nå dem måste de bli sekretessbelagda vilket behövs för att kunna bevara patienternas integritet. Eftersom det är vi själva som ska skapa detta system måste vi veta vad för användargrupper ska ha tillgång till journalerna samt vilken sorts tillgång de har till dem. Dessa grupper består av statliga organ, läkare, sjuksköterskor samt patioenterna själva. Vad grupperna får göra på databasen skiljer sig drastiskt vilka listas nedan:
+Syftet med vårt projekt är att analysera verkliga situationer som kan uppkomma. I detta fall kommer vi studera hur en server på ett sjukhus håller samtliga journaler för patienterna säkra mot intrång. Dessa journaler ska inte nås av vem som helst utan endast av individer som journalerna har betydelse för. För att inte alla ska kunna nå dem måste de bli sekretessbelagda vilket behövs för att kunna bevara patienternas integritet. Eftersom det är vi själva som ska skapa detta system måste vi veta vad för användargrupper ska ha tillgång till journalerna samt vilken sorts tillgång de har till dem. Dessa grupper består av statliga organ, läkare, sjuksköterskor samt patienterna själva. Vad grupperna får göra på databasen skiljer sig drastiskt. Grupperna listas nedan:
 
 \begin{itemize}
 \item{Socialstyrelsen}
@@ -11,10 +11,10 @@ Syftet med vårt projekt är att analysera verkliga situationer som kan uppkomma
 
 
 \subsection{Socialstyrelsen}
-Socialstyrelsen är det organ som bestämmer, det vill säga de har befogenheter till att kunna ta bort samt lägga till journaler. 
+Socialstyrelsen är det organ som bestämmer, det vill säga att de har befogenheter för att kunna ta bort samt läsa journaler. 
 
 \subsection{Läkare}
-Läkaren kan däremot skriva och läsa färdiga journaler, förutsatt att han är den som tar hand om patienten. Han kan också läsa journaler som som finns på hans avdelning. Om patienten inte har någon journal har läkaren befogenheten till att skapa journalen. Kravet är då att läkaren själv är den som behandlar patienten.
+Läkaren kan däremot skriva och läsa färdiga journaler, förutsatt att han är den som tar hand om patienten. Han kan också läsa journaler som som finns på hans avdelning. Läkaren har även befogenheten att skapa nya journaler för patienter. Kravet är då att läkaren själv är den som behandlar patienten.
 
 \subsection{Sköterska}
 Sköterskans rättigheter är att hon kan läsa och skriva till journalerna som hon är skriven på och att läsa alla journaler från hennes avdelning.

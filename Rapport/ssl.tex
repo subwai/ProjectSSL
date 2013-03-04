@@ -5,13 +5,13 @@ Protokollet befinner sig mellan de två översta lagren i TCP/IP modellen, trans
 Eftersom protkollet används för säkra anslutningar på nätet faller det i sin natur att SSL används mestadels i Hypertext Transfer Protocol (HTTP) \cite{JSSE} 
 
 Många andra applikationer kan dra nytta av SSLs säkra anslutningar, några av dem är Telnet och FTP. 
-SSL protokollet har två lager av protokoll vilket har olika funktioner [inludera en bild på det].
+SSL protokollet har två lager av protokoll vilket har olika funktioner.
 
 \subsection{Record Layer}
-I Record Layer ser protokollet till att meddelandena får integritetsskydd. För att göra detta så använder sig SSL av symmetriska nycklar och digitala signaturer. Det som utförs är att det beräknas en MAC för packetet som ska skickas med hjälp av HMAC funktionen. HMAC funktionen är till för att kunna kontrollera datan om den är säker över en opålitlig länk. Parterna som använder sig av HMAC delar på en nyckel för att kunna utföra samma säkerthetskontroll. HMACen används med en hashfunktion som till exempel MD5, och därav ett h framför MAC. MACen kommer tillsammans med datan krypteras och vara datapacketet av Record protokollet. Utöver detta kommer det finnas en header som innehåller information om hur en 'handshake' går till, vilken version av SSL/ TLS som används samt hur mycket data det finns i paketet.
+I Record Layer ser protokollet till att meddelandena får integritetsskydd. För att göra detta så använder sig SSL av symmetriska nycklar och digitala signaturer. Det som utförs är att det beräknas en MAC (Message Authentication Code) för packetet som ska skickas med hjälp av HMAC funktionen. HMAC funktionen är till för att kunna kontrollera datan om den är säker över en opålitlig länk. Parterna som använder sig av HMAC delar på en nyckel för att kunna utföra samma säkerthetskontroll. HMACen används med en hashfunktion som till exempel MD5, och därav ett h framför MAC. MACen kommer tillsammans med datan krypteras och vara datapacketet av Record protokollet. Utöver detta kommer det finnas en header som innehåller information om hur en 'handshake' går till, vilken version av SSL/ TLS som används samt hur mycket data det finns i paketet.
 
 \subsection{Upper Layer Protocols}
-I Upper Layer Protocols är det flera steg som utförs. Här kommer protokollet tilldela nycklar och autentisera klienter respektive servrar med hjälp av assymetriska nycklar. När protokollet gör detta betyder det att protokollet startar sin 'handshake' metod. Utöver själva autentiseringen av server till klient så tillhandager 'handshake' också:
+I Upper Layer Protocols är det flera steg som utförs. Här kommer protokollet tilldela nycklar och autentisera klienter respektive servrar med hjälp av assymetriska nycklar. När protokollet gör detta betyder det att protokollet startar sin 'handshake' metod. Utöver själva autentiseringen av server till klient så tillhandahåller 'handshake' också:
 
 
 \begin{enumerate}
@@ -23,7 +23,7 @@ I Upper Layer Protocols är det flera steg som utförs. Här kommer protokollet 
 Eftersom denna 'handshake' kan bestå av delar eller hela meddelandecyklar, beskriver vi hur vårt system använder sig av dessa meddelanden i vår 'handshake' metod.
 
 \subsection{Handshake}
-Första steget i SSL handshake processen är att klienten skickar en 'client hello' till servern. Syftet med detta meddelande är att initiera handshake processen. Meddelandet inkluderar en lista av alla krypteringsmetoder (ciphers) klienten kan använda sig av. En annan viktigt data som skickas är client random (slumpmässigt tal). Detta tal används senare för att räkna ut master secret, dvs den nyckel som klienten och servern använder sig av för att kryptera och dekryptera data.
+Första steget i SSL handshake processen är att klienten skickar en 'client hello' till servern. Syftet med detta meddelande är att initiera handshake processen. Meddelandet inkluderar en lista av alla krypteringsmetoder (ciphers) klienten kan använda sig av. En annan viktigt typ av data som skickas är client random (slumpmässigt tal). Detta tal används senare för att räkna ut master secret, dvs den nyckel som klienten och servern använder sig av för att kryptera och dekryptera data.
 
 Server skickar därefter en 'server hello' till klienten. Servern väljer den säkraste krypteringsmetoden som både den och klienten stödjer och denna anges i meddelandet. I vårt fall är detta RSA som nyckelutbytesalgoritm, RC4 som krypteringsmetod och MD5 för HMAC. Denna kombination är mycket vanlig i moderna operativsystem. Ett slumpmässigt tal skickas även i detta meddelande, och det har samma syfte som client random, dvs räkna ut master secret.
 
