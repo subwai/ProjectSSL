@@ -35,7 +35,7 @@ public class Client {
 	}
 
 	private void run() throws IOException {
-		String host = "localhost";
+		String serverHost = "localhost";
 		Scanner scan = new Scanner(System.in);
 
 		System.setProperty("javax.net.ssl.trustStore", "keys/hca_trusted.jks");
@@ -57,7 +57,7 @@ public class Client {
 			ks = KeyStore.getInstance("JKS");
 
 			try {
-				ks.load(new FileInputStream("keys/" + user + ".jks"),null);
+				ks.load(new FileInputStream("keys/" + user + ".jks"),passphrase);
 			} catch (IOException ex) {	
 				System.err.println("Invalid username/key provided. Exiting");
 				return;
@@ -77,7 +77,7 @@ public class Client {
 		}
 
 		try {
-			socket = (SSLSocket) factory.createSocket(host, Shared.SERVER_PORT);
+			socket = (SSLSocket) factory.createSocket(serverHost, Shared.SERVER_PORT);
 		} catch (ConnectException ex) {
 			System.out.println("Could not connect to server. Reason: "
 					+ ex.getMessage());
@@ -87,8 +87,10 @@ public class Client {
 		socket.setNeedClientAuth(true);
 
 
-		System.out.print("Connecting to server..  ");
+		System.out.print("Connecting to server..");
 		socket.startHandshake();
+		
+		Shared.printSocketInfo(socket);
 		
 		String username = Shared.commonNameFrom(socket);
 		

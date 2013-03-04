@@ -14,7 +14,7 @@ import javax.security.cert.X509Certificate;
 
 public class Shared {
 	static final String SERVER_KEY = "server";
-	static final int SERVER_PORT = 1337;
+	static final int SERVER_PORT = 40285;
 	
 	protected static String readPassword(Scanner scan) throws IOException {
 		if (System.console() != null) {
@@ -49,7 +49,7 @@ public class Shared {
 	}
 	
 	@SuppressWarnings("unused")
-	private static void printSocketInfo(SSLSocket s) {
+	protected static void printSocketInfo(SSLSocket s) {
         System.out.println("Socket class: " + s.getClass());
         System.out.println("   Remote address = "
                         + s.getInetAddress().toString());
@@ -66,7 +66,7 @@ public class Shared {
         System.out.println("   Protocol = " + ss.getProtocol());
 	}
 	@SuppressWarnings("unused")
-	private static void printServerSocketInfo(SSLServerSocket s) {
+	protected static void printServerSocketInfo(SSLServerSocket s) {
         System.out.println("Server socket class: " + s.getClass());
         System.out.println("   Socker address = "
                         + s.getInetAddress().toString());

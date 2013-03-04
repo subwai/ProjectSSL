@@ -72,7 +72,7 @@ public class Server {
 		kmf = KeyManagerFactory.getInstance("SunX509");
 		ks = KeyStore.getInstance("JKS");
 
-		ks.load(new FileInputStream("keys/"+Shared.SERVER_KEY+".jks"), null);
+		ks.load(new FileInputStream("keys/"+Shared.SERVER_KEY+".jks"), passphrase.toCharArray());
 		kmf.init(ks, passphrase.toCharArray());
 		ctx.init(kmf.getKeyManagers(), null, null);
 		SSLServerSocketFactory factory =  ctx.getServerSocketFactory();

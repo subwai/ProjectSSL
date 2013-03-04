@@ -3,7 +3,7 @@ keyname=$1
 existing_ca=$2
 
 echo "############ generate key"
-keytool -genkey -keyalg RSA -keystore $keyname.jks -alias $keyname -dname "CN=$keyname, O=LTH, L=Lund, S=Skane, C=SE"
+keytool -genkey -keyalg RSA -keysize 2048 -keystore $keyname.jks -alias $keyname -dname "CN=$keyname, O=LTH, L=Lund, S=Skane, C=SE"
 
 echo "############ certificate request"
 keytool -certreq -alias $keyname -keyalg RSA -file $keyname.req -keystore $keyname.jks
