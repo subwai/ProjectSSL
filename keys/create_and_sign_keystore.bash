@@ -16,3 +16,7 @@ keytool -import -alias root -keystore $keyname.jks -file $existing_ca.crt
 
 echo "############ import signed certificate"
 keytool -import -alias $keyname -keystore $keyname.jks -file $keyname.cer
+
+rm $keyname.cer
+rm $keyname.req
+rm $existing_ca.srl

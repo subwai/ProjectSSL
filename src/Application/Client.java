@@ -90,7 +90,7 @@ public class Client {
 		System.out.print("Connecting to server..");
 		socket.startHandshake();
 		
-		Shared.printSocketInfo(socket);
+		//Shared.printSocketInfo(socket);
 		
 		String username = Shared.commonNameFrom(socket);
 		

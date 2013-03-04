@@ -27,10 +27,10 @@ public class Database implements Serializable{
 		divisions.put("quarantine", new Division("quarantine"));
 		divisions.put("xray", new Division("xray"));
 
-		users.put("Johan", new Patient("Johan"));
-		users.put("Sven", new Nurse("Sven", divisions.get("surgery")));
-		users.put("Mergim", new Doctor("Mergim", divisions.get("surgery")));
-		users.put("Adam", new Doctor("Adam", divisions.get("surgery")));
+		users.put("johan", new Patient("johan"));
+		users.put("sven", new Nurse("sven", divisions.get("surgery")));
+		users.put("mergim", new Doctor("mergim", divisions.get("surgery")));
+		users.put("adam", new Doctor("adam", divisions.get("surgery")));
 		users.put("socialstyrelsen", new Admin("socialstyrelsen"));
 	}
 
