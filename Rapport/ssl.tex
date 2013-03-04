@@ -29,7 +29,7 @@ Server skickar därefter en 'server hello' till klienten. Servern väljer den s�
 
 Följt av detta skickar servern sitt certifikat (server certificate), en bestämd krypteringsmetod samt ett slumpmässigt tal. Certifikatet skickas med kedjan av alla validerande certifikat, exklusive root certificatet. Klienten kan senare i processen använda detta certifikat med dess publika nyckel för att kryptera meddelanden under handshake processen.
 
-Servern passar även på att skicka även en förfrågan om att klienten ska skicka sitt certifikat till servern (client certificate request). Därefter meddelar servern att den är klar och väntar svar från klienten (server hello done), och detta är nästa steg i processen.
+Servern passar även på att skicka en förfrågan om att klienten ska skicka sitt certifikat till servern (client certificate request). Därefter meddelar servern att den är klar och väntar svar från klienten (server hello done), och detta är nästa steg i processen.
 
 Klienten skickar nu, på samma sätt som servern gjorde tidigare, sitt certifikat till servern (client certificate). Därefter genererar klienten en pre-master secret, som används av både klienten och servern för att generera master secret tillsammans med client och server random. Detta värde krypteras och skickas till servern (client key exchange) med serverns publika nyckel, så att endast servern kan dekryptera pre-master secret.
 

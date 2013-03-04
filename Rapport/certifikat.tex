@@ -14,7 +14,7 @@ Det händer också att falska sidor tar denna nyckeln och påstår att denna är
 För att kunna skapa och hantera certifikaten rätt har man tagit fram standarder för detta. En standard som används väldigt väl och som vi använt till vårt projekt är X.509.                                         
 
 \subsection{SSL Certifikat}
-Eftersom vi använder oss av SSL i vår nätverksanslutning mellan klient och server så kommer det finnas inbakade SSL certifikat som SSL kommer använda vid handshake fasen. Det som händer då är att SSL certifikatet innehar krypteringsnycklarna som ska säkra uppkopplingen, som respektive nod skickar till sin uppkopplingsnod [referens: \cite{SSL}. På så sätt delar de krypteringsnycklar i en handshake mellan varanda. Värt att notera är att servern skickar sitt certifikat till klienten men att klienten ska skicka sitt för att autentisera sig är frivilligt.
+Eftersom vi använder oss av SSL i vår nätverksanslutning mellan klient och server så kommer det finnas inbakade SSL certifikat som SSL kommer använda vid handshake fasen. Det som händer då är att SSL certifikatet innehar krypteringsnycklarna som ska säkra uppkopplingen, som respektive nod skickar till sin uppkopplingsnod [referens: \cite{SSL}. På så sätt delar de krypteringsnycklar i en handshake mellan varanda. Värt att notera är att det är frivilligt för både servern och klienten att skicka sina certifikat till varandra.
 
 \subsection{Certifikat - Projekt}
 För att vårt projekt ska fungera måste vi skapa egna certifikat för att kunna autentisera klienterna och på så sätt skapa en två faktor autentisering. 
