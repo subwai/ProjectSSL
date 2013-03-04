@@ -14,12 +14,12 @@ De attacker som vi ska analysera är:
 \item{Man In The Middle}
 \item{Spoofing Attacks}
 \item{Fishing Attack}
-\item{Brute Force Attacks}
-\item{Dictionary Attacks}
-\item{Time - Memory - Tradeoff - Attacks}
-\item{Replay - Attacks}
-\item{Buffer Overflow}
-\item{Human Factor}
+\item{Fake Certificates}
+\item{Replay Attacks}
+\item{Brute Force \& Dictionary Attacks}
+\item{Buffer Overflow Attack}
+\item{Mänskliga Faktorn}
+\item{Hur bör lösenorden väljas?}
 \end{itemize}
 
 \subsection{Eavesdropping}
@@ -33,34 +33,51 @@ För att en attack ska kallas för man-in-the-middle attack (MITM) så ska hacka
 
 Det är oftast kryptosystem som blir drabbade av MITM, speciellt de kryptosystem som använder publika nycklar. För att illustrera händelseförloppet använder vi oss av tre personer där Alice är klienten, Magnus är MITM och Bob är servern. När Alice vill skapa en anslutning kommer hon söka efter Bobs publika nyckel. Denna får hon genom att skicka en request efter den. Men eftersom Magnus är en MITM och får all data först kommer han att vidarebefodra meddelandet till Bob som sedan skickar sin publika nyckel till Magnus. Magnus kommer sedan att skicka sin nyckel till Alice som tror att nyckeln är Bobs. Nu kommer Alice att skicka meddelandet krypterat med Magnus nyckel istället för Bobs. Då kommer Magnus att kunna läsa datan och möjligtvis förändra den för att skapa problem för både Alice och Bob. 
 
+Denna sortens attack går inte att utföra på vårt system då vi valt att autentisera båda parterna innan data kan skickas. Att båda parterna måste autentisera sig kallas för mutual authentication vilket gör att klient och server vet precis vem de kommunicerar med. Att använda sig av mutual authentication gör att denna sorts attack kommer unvikas förutsatt att den privata nyckeln aldrig kommer ut.
+
 \subsection{Spoofing Attacks}
 
-qweqwe
+Att utföra en spoofing attack i vårt system innebär att någon skapar falsk klient som är identisk med originalets utseende. På så sätt kan en användare luras till att skriva in sina personuppgifter samt lösenord. Eftersom klienten är falsk kan utvecklaren själv bestämma vart denna information ska skickas eftersom man aldrig kommer att autentisera sig mot servern. När informationen blivit skickad till önskad plats kommer programmet stängas ner och användaren dirigeras till den genuina klienten som har till uppggift att autentisera sig mot servern. Oftast tror användaren att han skrivit in fel lösenord och skriver in det en gång till. Eftersom denna gången kommer han att kunna autentisera sig mot servern så kommer användaren tro att det verkligen var fel lösenord han matat in. 
+
+För att skydda sig mot denna sorts attack kan i vårt fall sjukhuset dela ut dosor till alla som har anvädning av klienterna. Denna dosa genererar en kod som man skriver in istället för att använda sig av en privat nyckel. Det finns redan system som använder detta och exempel på detta är banker. 
+
+Att försöka göra en spoofing attack på servern går däremot inte lika bra då vi ser till att servern blir autentiserad hos klienten med ett certifikat.
 
 \subsection{Fishing Attacks}
 
-qweqwe
 
-\subsection{Brute Force Attacks}
 
-qweqwe
+\subsection{Fake Certificates}
 
-\subsection{Dictionary Attacks}
 
-qweqwe
 
-\subsection{Time - Memory - Tradeoff - Attacks}
+\subsection{Replay Attacks}
 
-qweqwe
 
-\subsection{Replay - Attacks}
+När någon vill utföra en Replay attack så ska han lyssna på länken och spara all data som skickar från exempelvis klient till server. Hackaren som vill utföra attacken kan sedan skicka denna data vid ett senare tillfälle för att få ut data från servern. [\url{http://msdn.microsoft.com/en-us/library/aa738652.aspx}]
 
-qweqwe
+Eftersom vi använder oss av SSL protokollet för att ansluta server med klient är denna typ av attack inte möjlig. SSL har ett 'nonce' som är ett tal vilket är unikt för varje anslutning. Med detta 'nonce' blir det möjligt att skicka två identiska klartexter med olika chiffertexter. 
 
-\subsection{Buffer Overflow}
+\subsection{Brute Force \& Dictionary Attacks}
 
-qweqwe
+Att utföra en Brute Force attack beytder att man sitter och testar alla olika möjliga kombinationer av lösenord. Detta är ett väldigt ineffektivt sätt att försöka knäcka ett lösen efter det tar extremt lång tid om lösenordet är långt. Om vi använder ett alfanumeriskt lösenord, vilket betyder att vi bland både bokstäver och siffror så skulle ett lösenord på upp till 7 tecken kräva \begin{math}2^{42} \end{math} olika kombinationer [\url{http://www.eit.lth.se/fileadmin/eit/courses/eit060/lect/Lect4.pdf}]. Att använda ett längre lösenord samt att inkludera specialtecken gör det i princip omöjligt att knäcka lösenordet.
 
-\subsection{Human Factor}
+Att utföra en Dictionary Attack är ungefär samma sak som att utföra en Brute Force attack men här testar man vanligt förekommande ord istället för att villt gissa på olika lösenord. Uttöver vanligt förekommande ord så finns också lösenord som är lätta med i listan bland alla ord. Denna attack är ca 4000 gånger snabbare än Brute Force attacken [\url{http://www.eit.lth.se/fileadmin/eit/courses/eit060/lect/Lect4.pdf}]. 
 
-qweqwe
+Dessa attacker är möjliga mot vårt system men det hade tagit tid eftersom lösenorden är längre än 7 tecken.
+
+\subsection{Buffer Overflow Attack}
+
+En Buffer Overflow attack är en attack som som inträffar då man skriver in mer data än vad bufferten klarar av som systemet allokerat till ett program. Detta kommer leda till att programmet kraschar vilket är något alla vid undvika. Denna attack är ej möjlig mot vårt program eftersom det är skriver i Java. Java skyddar mot detta automatiskt genom att inte tillåta data överskriva bufferten.
+
+\subsection{Mänskliga Faktorn}
+
+Det är svårt att utveckla säkra system så länge den mänskliga faktorn finns med i bilden. Det finns alltid de som inte orkar komma ihåg ett långt lösenord och på så sätt blir det lätt för en hackare att få tag på lösenordet. Men för att undgå detta problem så kan utvecklarna lägga in så att man är tvungen att ha ett lösenord på minst 7 tecken. Detta får kan få följdproblem då användaren lätt kan glömma lösenord som är långa vilket resulterar i att de skriver ner detta i klartext. Om någon får tag på det så har systemet med att ett lösenordsskydd falerat. Enklaste sättet att ge användaren ett säkert system är att de får byta lösenord ofta, vilket eliminerar flera attacker. Varför attackerna går att eliminera är för att till exempel om vi kör en dictionary attack så kan attacken gått så långt i sin lista så att när användaren väl byter lösenord har attacken redan testat det nya lösenordet tidigare utan lycka. 
+
+\subsection{Hur bör lösenord väljas?}
+
+Att lösenorden till olika system är dåliga är ett vanligt förrekommande problem. Många har inte orken till att skapa ett svårknäckt lösenord eller så förstår de inte hur lätt det är att knäcka ett lösenord. 
+
+För att ett lösenord ska vara säkert borde det vara minst 8 tecken långt. För att göra det svårt framtida brute force attacker borde lösenordet innehålla tecken från alla fyra teckentyperna. Dessa teckentyper är siffror, specialtecken samt stora och små bokstäver vilka tillsammans genererar ett komplext lösenord. 
+
+För att göra användaren medveten om hur bra eller dåligt lösenord han väljer kan man implementera funktioner som berättar för användaren hur bra deras valda lösenord är. Dessa tillägg ser man ofta på webbsidor där lösenorden spelar stor roll som till exempel gmail.com. Denna funktion fungerar som så att för varje tecken som användaren matar in så berättar funktionen om lösenordet är bra valt eller för den delen uselt. Fler tjänster borde använda sig av denna sort säkerhetsfunktion eftersom den gör användaren medveten om hur bra eller dåligt lösenord de håller på att välja.
