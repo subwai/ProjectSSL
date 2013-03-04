@@ -29,7 +29,7 @@ Eftersom vi ska skicka sjukjournaler över nätet är det viktigt att ingen kan 
 
 \subsection{Man In The Middle}
 
-För att en attack ska kallas för man-in-the-middle attack (MITM) så ska hackaren lägga sig mellan klient och server. När hackaren lyckats lägga sig mellan noderna och fått en etablerad anslutning mellan sig och server samt mellan sig och klient kan hackaren tjuvlyssna på länken och göra förändringar i systemet. Detta är med andra ord en aktiv hackare, till skillnad från den passiva hackaren i eavesdropping. Det som händer är att klienten kommer vara övertygad om att MITM är servern och servern kommer tro att MITM är en legitim användare. Om klienten vill skicka data till servern kommer detta först gå till MITM som sedan vidarebefodrar det till servern och sedan om servern svarar på detta kommer MITM vidarebefodra detta till klienten. Det är just så här hackaren kan ändra, kopiera och skicka datan till andra noder [\url{http://en.wikipedia.org/wiki/Man-in-the-middle_attack}].
+För att en attack ska kallas för man-in-the-middle attack (MITM) så ska hackaren lägga sig mellan klient och server. När hackaren lyckats lägga sig mellan noderna och fått en etablerad anslutning mellan sig och server samt mellan sig och klient kan hackaren tjuvlyssna på länken och göra förändringar i systemet. Detta är med andra ord en aktiv hackare, till skillnad från den passiva hackaren i eavesdropping. Det som händer är att klienten kommer vara övertygad om att MITM är servern och servern kommer tro att MITM är en legitim användare. Om klienten vill skicka data till servern kommer detta först gå till MITM som sedan vidarebefodrar det till servern och sedan om servern svarar på detta kommer MITM vidarebefodra detta till klienten. Det är just så här hackaren kan ändra, kopiera och skicka datan till andra noder \cite{MITM}.
 
 Det är oftast kryptosystem som blir drabbade av MITM, speciellt de kryptosystem som använder publika nycklar. För att illustrera händelseförloppet använder vi oss av tre personer där Alice är klienten, Magnus är MITM och Bob är servern. När Alice vill skapa en anslutning kommer hon söka efter Bobs publika nyckel. Denna får hon genom att skicka en request efter den. Men eftersom Magnus är en MITM och får all data först kommer han att vidarebefodra meddelandet till Bob som sedan skickar sin publika nyckel till Magnus. Magnus kommer sedan att skicka sin nyckel till Alice som tror att nyckeln är Bobs. Nu kommer Alice att skicka meddelandet krypterat med Magnus nyckel istället för Bobs. Då kommer Magnus att kunna läsa datan och möjligtvis förändra den för att skapa problem för både Alice och Bob. 
 
@@ -43,26 +43,28 @@ För att skydda sig mot denna sorts attack kan i vårt fall sjukhuset dela ut do
 
 Att försöka göra en spoofing attack på servern går däremot inte lika bra då vi ser till att servern blir autentiserad hos klienten med ett certifikat.
 
-\subsection{Fishing Attacks}
+\subsection{Phishing Attacks}
 
-
+Phishing är en sorts attack som har till syfte att få tag på personlig information så som lösenord, användarnamn och kontouppgifter. Det vanligast förekommande phishing attacken är när hackaren skickar ut ett mail för att uppge sig vara för en legitim källa. I mailet får användaren klicka in sig på en hemsida som de ska fylla i med sin privata information. Denna information skickas sedan till hackaren istället för tjänsten de tror den var avsedd för. \cite{Phishing}. En phishing attack kan utföras på flera olika sätt och på grund av att det finns många möjligheter att utsättas för en attack blir det svårt för den vanliga användaren att skydda sig mot dessa. Därför är det viktigt att utvecklarna som tillhandahåller system har på något sätt skyddat sig mot detta. Samtidigt som utvecklaren ska implementera förhinder för en del attacker är det många som baseras på den mänskiga faktorn som beskrivs i ett annat stycke. 
 
 \subsection{Fake Certificates}
 
+När någon utger sig för att vara någon de inte är över nätet brukar de använda sig av falska certifikat. Det är enkelt att ska egna certifikat och säga att certifikatet tillhör en viss CA. Men eftersom du själv skapat certifikatet så har du själv skrivit på det och därmed uteslutit att certifikatet finns i CA:ns lista på betrodda parter. Eftersom det självskrivna certifikatet inte finns med i listan kommer den aldrig bli betrodd och på så sätt aldrig kunna fungera.
 
+Men det går att undgå detta problem genom att manuellt lägga in en CA i systemets truststore. När man väl gjort detta kan du skriva på ditt certifikat med din egna CA och på så sätt undgå säkerhetskontrollen. Det är givetvist väldigt omständingt och kräver att du har fysisk tillgänglighet till systemet vilket oftast är väldigt svårt. 
 
 \subsection{Replay Attacks}
 
 
-När någon vill utföra en Replay attack så ska han lyssna på länken och spara all data som skickar från exempelvis klient till server. Hackaren som vill utföra attacken kan sedan skicka denna data vid ett senare tillfälle för att få ut data från servern. [\url{http://msdn.microsoft.com/en-us/library/aa738652.aspx}]
+När någon vill utföra en Replay attack så ska han lyssna på länken och spara all data som skickar från exempelvis klient till server. Hackaren som vill utföra attacken kan sedan skicka denna data vid ett senare tillfälle för att få ut data från servern \cite{Replay}.
 
 Eftersom vi använder oss av SSL protokollet för att ansluta server med klient är denna typ av attack inte möjlig. SSL har ett 'nonce' som är ett tal vilket är unikt för varje anslutning. Med detta 'nonce' blir det möjligt att skicka två identiska klartexter med olika chiffertexter. 
 
 \subsection{Brute Force \& Dictionary Attacks}
 
-Att utföra en Brute Force attack beytder att man sitter och testar alla olika möjliga kombinationer av lösenord. Detta är ett väldigt ineffektivt sätt att försöka knäcka ett lösen efter det tar extremt lång tid om lösenordet är långt. Om vi använder ett alfanumeriskt lösenord, vilket betyder att vi bland både bokstäver och siffror så skulle ett lösenord på upp till 7 tecken kräva \begin{math}2^{42} \end{math} olika kombinationer [\url{http://www.eit.lth.se/fileadmin/eit/courses/eit060/lect/Lect4.pdf}]. Att använda ett längre lösenord samt att inkludera specialtecken gör det i princip omöjligt att knäcka lösenordet.
+Att utföra en Brute Force attack beytder att man sitter och testar alla olika möjliga kombinationer av lösenord. Detta är ett väldigt ineffektivt sätt att försöka knäcka ett lösen efter det tar extremt lång tid om lösenordet är långt. Om vi använder ett alfanumeriskt lösenord, vilket betyder att vi bland både bokstäver och siffror så skulle ett lösenord på upp till 7 tecken kräva \begin{math}2^{42} \end{math} olika kombinationer \cite{F4}. Att använda ett längre lösenord samt att inkludera specialtecken gör det i princip omöjligt att knäcka lösenordet.
 
-Att utföra en Dictionary Attack är ungefär samma sak som att utföra en Brute Force attack men här testar man vanligt förekommande ord istället för att villt gissa på olika lösenord. Uttöver vanligt förekommande ord så finns också lösenord som är lätta med i listan bland alla ord. Denna attack är ca 4000 gånger snabbare än Brute Force attacken [\url{http://www.eit.lth.se/fileadmin/eit/courses/eit060/lect/Lect4.pdf}]. 
+Att utföra en Dictionary Attack är ungefär samma sak som att utföra en Brute Force attack men här testar man vanligt förekommande ord istället för att villt gissa på olika lösenord. Uttöver vanligt förekommande ord så finns också lösenord som är lätta med i listan bland alla ord. Denna attack är ca 4000 gånger snabbare än Brute Force attacken [\cite{F4}]. 
 
 Dessa attacker är möjliga mot vårt system men det hade tagit tid eftersom lösenorden är längre än 7 tecken.
 
