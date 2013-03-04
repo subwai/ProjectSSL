@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+//Saved, edits, deletes and creates record data.
 public class Database implements Serializable{
 
 	private static final long serialVersionUID = 299569853749729381L;
@@ -16,7 +17,7 @@ public class Database implements Serializable{
 	private Map<String, Person> users;
 	private Map<String, Division> divisions;
 	
-
+	
 	public Database() {
 		
 		records = new HashMap<Integer, Record>();

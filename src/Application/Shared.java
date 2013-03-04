@@ -12,6 +12,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.security.cert.X509Certificate;
 
+//Extracted server logic.
 public class Shared {
 	static final String SERVER_KEY = "server";
 	static final int SERVER_PORT = 40285;

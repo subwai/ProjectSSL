@@ -15,8 +15,7 @@ public class Response {
 	// associated logic) which is returned to the client.
 	public void build(Request req, Person user, Database db, Logger logger) {
 
-		// I would recommend extracting the logic from Server into a db class or
-		// something
+		
 
 		String action = req.action;
 		List<String> args = req.args;

@@ -7,6 +7,8 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.SimpleFormatter;
 
+//Class that handles logged events.
+//
 public class ListLogHandler extends Handler implements Serializable, Runnable{
 	
 	private static final long serialVersionUID = 3768934543061595961L;

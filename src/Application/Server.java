@@ -20,6 +20,7 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 
+//Starts server session.
 public class Server {
 	static final String LOG_PATH = "server.log";
 	static final String SALT = "A6GXcTrb9wOW2jb1ILkESY15";

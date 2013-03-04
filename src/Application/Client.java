@@ -33,7 +33,8 @@ public class Client {
 	public Client() throws IOException {
 		run();
 	}
-
+	
+	//Starts client session and connects with server.
 	private void run() throws IOException {
 		String serverHost = "localhost";
 		Scanner scan = new Scanner(System.in);
@@ -167,6 +168,7 @@ public class Client {
 		socket.close();
 	}
 
+	//Saves response data from server to response objekt.
 	private Response request(Request req) throws IOException, SocketException {
 		Response response = null;
 		try {
