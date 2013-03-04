@@ -99,7 +99,7 @@ public class Server {
 
 				socket.setKeepAlive(true);
 				Person user;
-				if ((user = db.searchUser(username)) != null) {
+				if ((user = db.searchUsers(username)) != null) {
 					System.out.println("user " + username + " connected as "
 							+ user.getClass().getSimpleName());
 					// start separate thread

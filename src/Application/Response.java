@@ -1,6 +1,8 @@
 package Application;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class Response {
@@ -21,7 +23,7 @@ public class Response {
 		StringBuilder sb = new StringBuilder();
 		if (action.equals("list")) {
 			String patient = req.args.get(0);
-			List<Record> records;
+			HashMap<Integer, Record> records;
 			if (patient.equals("all")) {
 				sb.append("List of all your available records:%n");
 				records = db.listRecords(user);
@@ -33,7 +35,7 @@ public class Response {
 			}
 
 			sb.append("------------------------------------------------------------------- ");
-			for (Record r : records) {
+			for (Record r : records.values()) {
 				sb.append("%n" + r.toString());
 			}
 					

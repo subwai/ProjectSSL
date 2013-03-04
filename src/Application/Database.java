@@ -2,68 +2,59 @@ package Application;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class Database implements Serializable{
 
 	private static final long serialVersionUID = 299569853749729381L;
 	
 	
-	private ArrayList<Record> records;
-	private ArrayList<Person> users;
-	private ArrayList<Division> divisions;
+	private Map<Integer, Record> records;
+	private Map<String, Person> users;
+	private Map<String, Division> divisions;
 	
 
 	public Database() {
 		
-		records = new ArrayList<Record>();
-		users = new ArrayList<Person>();
-		divisions = new ArrayList<Division>();
+		records = new HashMap<Integer, Record>();
+		users = new HashMap<String, Person>();
+		divisions = new HashMap<String, Division>();
 
-		Division surgery = new Division("surgery");
-		Division xray = new Division("xray");
-		Division quarantine = new Division("quarantine");
-		divisions.add(surgery);
-		divisions.add(xray);
-		divisions.add(quarantine);
+		divisions.put("surgery", new Division("surgery"));
+		divisions.put("quarantine", new Division("quarantine"));
+		divisions.put("xray", new Division("xray"));
 
-		users.add(new Patient("Johan"));
-		users.add(new Nurse("Sven", surgery));
-		users.add(new Doctor("Mergim", surgery));
-		users.add(new Doctor("Adam", surgery));
-		users.add(new Admin("socialstyrelsen"));
+		users.put("Johan", new Patient("Johan"));
+		users.put("Sven", new Nurse("Sven", divisions.get("surgery")));
+		users.put("Mergim", new Doctor("Mergim", divisions.get("surgery")));
+		users.put("Adam", new Doctor("Adam", divisions.get("surgery")));
+		users.put("socialstyrelsen", new Admin("socialstyrelsen"));
 	}
 
-	public Person searchUser(String username) {
-		ArrayList<Person> pArr = filter(users, new Predicate<Person>(
-				new String[] { username }) {
+	public Person searchUsers(String person) {
+		return users.get(person);
+	}
+	
+	public HashMap<Integer, Record> listRecords(Person user) {
+		return filter(records, new Predicate<Record>() {
 			@Override
-			public boolean apply(Person p) {
-				return ((String) this.args[0]).equalsIgnoreCase(p.getName());
+			public boolean apply(Record r, Person... args) {
+				return args[0].hasReadAccess(r);
 			}
-		});
-		return pArr.size() > 0 ? pArr.get(0) : null;
+		}, user);
 	}
 
-	public List<Record> listRecords(Person user) {
-		return filter(records, new Predicate<Record>(new Object[] { user }) {
+	public HashMap<Integer, Record> searchRecords(Person user, String patient) {
+		return filter(records, new Predicate<Record>() {
 			@Override
-			public boolean apply(Record r) {
-				return ((Person) this.args[0]).hasReadAccess(r);
+			public boolean apply(Record r, Person... args) {
+				return args[0].hasReadAccess(r)
+						&& (args[1] != null && args[1].equals(r.getPatient()));
 			}
-		});
-	}
-
-	public List<Record> searchRecords(Person user, String patient) {
-		return filter(records, new Predicate<Record>(new Object[] { user,
-				patient }) {
-			@Override
-			public boolean apply(Record r) {
-				return ((Person) this.args[0]).hasReadAccess(r)
-						&& ((String) this.args[1]).equalsIgnoreCase(r
-								.getPatient().getName());
-			}
-		});
+		}, user, users.get(patient));
 	}
 
 	public int createRecord(Person user, String patient, String doctor, String nurse,
@@ -72,45 +63,32 @@ public class Database implements Serializable{
 		Doctor d = null;
 		Nurse n = null;
 		Division div = null;
-		for (Person per : users) {
-			if (per.getName().equals(patient) && per instanceof Patient) {
-				p = (Patient) per;
-			} else if (per.getName().equals(doctor) && per instanceof Doctor) {
-				d = (Doctor) per;
-			} else if (per.getName().equals(nurse) && per instanceof Nurse) {
-				n = (Nurse) per;
+		users.containsKey(patient);
+		try {
+			if (users.containsKey(patient)) {
+				p = (Patient) users.get(patient);
+			} else {
+				users.put(patient, p = new Patient(patient));
 			}
-		}
-		
-		if (p == null) {
-			p = new Patient(patient);
-			users.add(p);
-		}
-		
-		for (Division divi : divisions) {
-			if (divi.getName().equals(division)) {
-				div = divi;
-			}
+			
+			d = (Doctor) users.get(doctor);
+			n = (Nurse) users.get(nurse);
+			div = divisions.get(division);
+		} catch (Exception e) {
+			return -1;
 		}
 		
 		// -1 = wrong input. -2 = No access to create.
-		if (d == null)
-			return -1;
-		if (n == null)
-			return -1;
-		if (div == null)
-			return -1;
 		if(d != user)
 			return -2; 
-		int id = records.size() + 1;
-		Record record = new Record(id, p, d, n, div, data);
-		records.add(record);
-		return id;
+		
+		records.put(records.size() + 1, new Record(records.size() + 1, p, d, n, div, data));
+		return records.size();
 	}
 	
 	public int editData(Person user, int ID, String data){
 		Record rec = null;
-		for(Record r: records){
+		for(Record r: records.values()){
 			if(r.getID() == ID){
 				rec = r;
 			}
@@ -128,7 +106,7 @@ public class Database implements Serializable{
 	}
 
 	public boolean deleteRecord(int ID) {
-		for (Record r : records) {
+		for (Record r : records.values()) {
 			if (r.getID() == ID) {
 				records.remove(ID);
 				return true;
@@ -137,14 +115,13 @@ public class Database implements Serializable{
 		return false;
 	}
 
-	protected <T> ArrayList<T> filter(ArrayList<T> target,
-			Predicate<T> predicate) {
-		ArrayList<T> result = new ArrayList<T>();
-		for (T element : target) {
-			if (predicate.apply(element)) {
-				result.add(element);
-			}
+	protected <K, V> HashMap<K, V> filter(Map<K, V> map, Predicate<V> p, Person... args) {
+		HashMap<K, V> filtered = new HashMap<K, V>();
+	    for (Entry<K, V> e : map.entrySet()) {
+	        if (p.apply(e.getValue(), args)) {
+	        	filtered.put(e.getKey(), e.getValue());
+	        }
 		}
-		return result;
+		return filtered;
 	}
 }
